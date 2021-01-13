@@ -74,7 +74,7 @@ If Interested
             Player(Pain):: "Yes! Yes! Yes!"
             "I came. I must have given my peeping Tom one hell of a show!"
         Endif
-    Endif // patched - added Endif
+    Endif // patched line 77 - insert EndIf
 
     timeout(24, caught_masturbating)
     SceneEnd()

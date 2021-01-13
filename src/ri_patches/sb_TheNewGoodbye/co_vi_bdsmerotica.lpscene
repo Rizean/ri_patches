@@ -37,7 +37,7 @@ OTHER: isAtHome() && !isWithCompanion()
         1:: "Resist the temptation"
 
         If 0
-            If Actor:masochist < -75            // patched added If at start
+            If Actor:masochist < -75            // patched line 40 - insert If at start of line
                 perversion += Random(0, 0.25)
                 masochist += Random(0, 0.25)
             Else

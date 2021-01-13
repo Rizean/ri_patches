@@ -1,7 +1,0 @@
-MODULE_UNIQUEID: ri_patch_sb_PimpYourGirl
-MODULE_NAME: Patch - Pimp Your Girl (Sexwork Improvement)
-MODULE_AUTHOR: Rizean
-MODULE_LINK: https://github.com/Rizean/ri-patches
-MODULE_DESCRIPTION: Patches for know bugs
-MODULE_REQUIREMENTS: sb_PimpYourGirl
-MODULE_VERSION: p1.3

@@ -47,7 +47,7 @@ OTHER: isAtHome()
                 Actor(Embarassed):: "Sorry. God, this is embarrassing ... this sometimes happens in the morning ..."
                 Player(Embarassed):: "It's okay. It happens."
             Endif
-        Endif // patch - Added missing Endif
+        Endif // patched line 50 - insert Endif
     Else
         "Maybe <Actor.he_or_she> took the day off. <Actor.He_or_She> would have set the alarm otherwise. I'll just let <Actor.him_or_her> sleep."
     Endif

@@ -78,7 +78,7 @@ OTHER: Random(0, 200) < attractiveness
                 Player(Pain):: "Yes! Yes! Yes!"
                 "I came. I must have given my peeping Tom one hell of a show!"
             Endif
-        Endif // patched added EndIf
+        Endif // patched line 81 - insert EndIf
         timeout(24, caught_masturbating)
         SceneEnd()
     Else

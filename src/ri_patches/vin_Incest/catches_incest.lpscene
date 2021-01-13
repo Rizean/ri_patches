@@ -57,10 +57,10 @@ OTHER: isAtHome()
         Else
             "Unfortunately for me, the door was fully closed and all the curtains were pulled down. There's no way I can get a look ..."
         Endif
-// patched Commented out repeated code
 //        Else
 //            "Unfortunately for me, the door was fully closed and all the curtains were pulled down. There's no way I can get a look ..."
 //        Endif
+// patched Commented out repeated code
     Endif
 
     SceneEnd()

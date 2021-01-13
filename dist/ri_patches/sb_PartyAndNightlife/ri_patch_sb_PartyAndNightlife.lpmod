@@ -1,7 +1,0 @@
-MODULE_UNIQUEID: ri_patch_sb_PartyAndNightlife
-MODULE_NAME: Patch - Party And Nightlife (House Party & Events)
-MODULE_AUTHOR: Rizean
-MODULE_LINK: https://github.com/Rizean/ri-patches
-MODULE_DESCRIPTION: Patches for know bugs
-MODULE_REQUIREMENTS: sb_PartyAndNightlife
-MODULE_VERSION: p1.0

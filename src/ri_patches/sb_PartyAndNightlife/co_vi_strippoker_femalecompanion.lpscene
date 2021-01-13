@@ -113,7 +113,7 @@ OTHER: none
                                     Guest3.show(3)
                                     choice = 4
 
-                                ElseIf masochist < 75 && Actor:perversion > 75 && Random(0,100) > 50 // patched replaced If with ElseIf
+                                ElseIf masochist < 75 && Actor:perversion > 75 && Random(0,100) > 50 // patched line 116 - replaced If with ElseIf
                                     Actor(Flirty):: "I'm feeling very naughty today, let's all have fun together!"
 
                                     Player.hide()

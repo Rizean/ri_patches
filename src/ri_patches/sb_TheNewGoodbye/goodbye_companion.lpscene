@@ -3528,7 +3528,7 @@ OTHER: none
                     Endif
                 Endif
             Endwhile
-        EndIf // patched insert EndIf
+        EndIf // patched line 3531 - insert EndIf
     Endif
 
     PCustomersToday = 0

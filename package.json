@@ -1,6 +1,6 @@
 {
   "name": "ri-patches",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "src/index.js",
   "repository": {
     "type": "git",
@@ -10,9 +10,10 @@
   "license": "The Unlicense",
   "keywords": ["lifeplay"],
   "scripts": {
-    "build": "node_modules/.bin/lpbuilder build ./src ./dist/ri_patches --ufe",
+    "build": "node_modules/.bin/lpbuilder build ./src/ri_patches ./build --ufe",
     "watch": "node_modules/.bin/lpbuilder watch ./src ./dist/ri_patches --ufe",
-    "package": "powershell \"Compress-Archive -Force ./src/ri_patches ./dist/ri_patches.zip\""
+    "packageold": "powershell \"Compress-Archive -Force ./src/ri_patches ./dist/ri_patches.zip\"",
+    "package": "powershell \"wsl ./scripts/package.sh\""
   },
   "devDependencies": {
     "lp-builder": "^0.5.11"

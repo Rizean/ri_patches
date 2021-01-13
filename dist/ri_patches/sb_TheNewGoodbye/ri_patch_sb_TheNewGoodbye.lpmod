@@ -1,7 +1,0 @@
-MODULE_UNIQUEID: ri_patch_sb_TheNewGoodbye
-MODULE_NAME: Patch - The New Goodbye (Date Improvements)
-MODULE_AUTHOR: Rizean
-MODULE_LINK: https://github.com/Rizean/ri-patches
-MODULE_DESCRIPTION: Patches for know bugs
-MODULE_REQUIREMENTS: sb_TheNewGoodbye
-MODULE_VERSION: p1.0a

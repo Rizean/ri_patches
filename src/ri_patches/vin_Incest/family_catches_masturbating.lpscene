@@ -54,7 +54,7 @@ OTHER: isAtHome()
             Player(Pain):: "Yes! Yes! Yes!"
             "I came. I must have given my peeping Tom one hell of a show!"
         Endif
-    Endif // patch Added missing  Endif
+    Endif // patched line 57 - insert EndIf
 
     timeout(24, family_catches_masturbating)
     SceneEnd()

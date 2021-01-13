@@ -223,7 +223,7 @@ OTHER: Random(0, 100) < 50
                 money -= Random(0, 20)
             Else
                 Actor:perversion += Random(0, 0.5)
-            EndIf // patched replaced End with EndIf
+            EndIf // patched line 226 - replaced End with EndIf
         Elseif scene == 128 // piano or IT
             "<Actor.name>'s school is asking for parents' consent to take part in some extra classes."
             0:: "Sign <Actor.him_or_her> up for piano"

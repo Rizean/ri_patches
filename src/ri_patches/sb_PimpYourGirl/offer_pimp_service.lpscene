@@ -181,5 +181,5 @@ OTHER: none
         Else
             "No, that's a crazy idea. There's no way <CurrentCompanion.he_or_she> would agree to this."
         Endif
-    EndIf  // patched insert EndIf
+    EndIf  // patched line 184 - insert EndIf
     SceneEnd()

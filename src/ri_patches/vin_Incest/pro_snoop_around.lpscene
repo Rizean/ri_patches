@@ -40,6 +40,6 @@ OTHER: none
         Actor.setCurrentLocation(Home)
         Until = HoursElapsed + Random(1, 3)
         Actor.setUntil(Until)
-    Endif
+    Endif // patched line 43 - insert Endif
 
     SceneEnd()

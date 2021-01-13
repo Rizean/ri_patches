@@ -238,7 +238,7 @@ WHO: none
                         CurrentCompanion(Happy):: "Done."
                     endRandom
                 Endif
-                // patched removed Endif
+                // patched line 241 - removed extra Endif
                 AddFollowers = true
                 passTime(0.1,0.5)
             Else
