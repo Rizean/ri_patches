@@ -1,0 +1,314 @@
+WHAT: prostitute_stats_pimp
+WHERE: sexwork, pc
+WHEN: 0 - 24
+WHO: none
+
+
+    SceneStart()
+
+    ownsAgency = CurrentCompanion.getActorVar(PYG_hasAdultAgencyLevel)
+
+    setBackgroundCustom(sb_phone_message)
+    Player.show(0)
+    CurrentCompanion.show(1)
+
+    "You grab your notebook and you both take a look at <CurrentCompanion.his_or_her> instaglam profile ... what do you want to do?"
+
+    If ownsAgency == 0 && [CurrentCompanion:age > 50 || CurrentCompanion:intelligence < 25]
+        Random
+            CurrentCompanion(Happy):: "I tried to do a few updates without you. I just don't understand how to do it!"
+            CurrentCompanion(Happy):: "Yesterday I had a chat with one of my fans. He was cute, but then he blocked me!"
+            CurrentCompanion(Happy):: "We should do another update, don't you think?"
+            CurrentCompanion(Happy):: "Here, look ... I got some great comments! ... Oh wait, that's not my profile."
+            CurrentCompanion(Happy):: "If only I would understand this technical nonsense a bit better ..."
+        endRandom
+    Elseif CurrentCompanion:instaglamfollowers > 100 && [Random(75,100) < CurrentCompanion:interpersonal || Random(75,100) < CurrentCompanion:perversion || Random(75,100) < CurrentCompanion:intelligence]
+        Random
+            CurrentCompanion(Happy):: "I did a few updates without you. You'll see!"
+            CurrentCompanion(Happy):: "Check the new pictures I uploaded yesterday."
+            CurrentCompanion(Happy):: "Yesterday I had a very nice chat with a fan. He was so cute!"
+            CurrentCompanion(Happy):: "I uploaded all photos yesterday. We need to take a few more pictures I think."
+            CurrentCompanion(Happy):: "Here, look ... I made a few updates. Got some great comments!"
+            CurrentCompanion(Happy):: "I already did a few uploads today ..."
+        endRandom
+        NewFollowers = 0
+        NewFollowers += CurrentCompanion:pornfame*(CurrentCompanion:attractiveness/10)-Random(0,100)
+        If NewFollowers > 0
+            "<CurrentCompanion.He_or_She> got <NewFollowers> followers without you."
+            CurrentCompanion:instaglamfollowers += NewFollowers
+        Endif
+    Endif
+
+    CurrentFollowers = 0
+    AddFollowersLow = false
+    AddFollowers = false
+    AddFollowersHigh = false
+    Instaglam = true
+
+    Interact = 0
+    Selfie = 0
+    Photos = 0
+    Videos = 0
+    Chat = 0
+
+    StockPhotos = CurrentCompanion:stock_sexyphoto
+    StockVideos = CurrentCompanion:stock_sexyvideo
+
+    While Instaglam
+        CurrentFollowers = CurrentCompanion:instaglamfollowers
+        "<CurrentCompanion.name> has currently <CurrentFollowers> followers on Instaglam."
+
+        0:: Interact < 2:: "Encourage <CurrentCompanion.him_or_her> to interact with <CurrentCompanion.his_or_her> fans"
+        1:: Selfie < 1:: "Encourage <CurrentCompanion.him_or_her> to upload a selfie right now"
+        2:: StockPhotos > 0:: "Upload sexy photos you took of <CurrentCompanion.him_or_her> (<StockPhotos>)"
+        3:: StockVideos > 0:: "Upload sexy videos you made of <CurrentCompanion.him_or_her> (<StockVideos>)"
+        4:: Chat < 1:: "Encourage <CurrentCompanion.him_or_her> to chat with <CurrentCompanion.his_or_her> fans"
+        5:: "Close Instaglam"
+
+        If 0
+            Interact += 1
+            If CurrentCompanion:interpersonal < 35 && CurrentCompanion:masochist > masochist && ownsAgency == 0
+                CurrentCompanion(Anxious):: "Do I really have to do this?"
+                "<CurrentCompanion.name> tries to answer some comments, but it seems <CurrentCompanion.he_or_she> is not very happy with it."
+                AddFollowersLow = true
+                passTime(0.1,0.5)
+            Elseif CurrentCompanion:perversion < 25 && CurrentCompanion:interpersonal < 35 && CurrentCompanion:masochist < masochist && ownsAgency == 0
+                CurrentCompanion(Angry):: "This is stupid! I don't want."
+            Elseif ownsAgency == 0 && [CurrentCompanion:age > 50 || CurrentCompanion:intelligence < 25]
+                Random
+                    CurrentCompanion():: "This is too complicated for me. Can you help me?"
+                    CurrentCompanion():: "This is not made for me. Can you help me please?"
+                    CurrentCompanion():: "Maybe you can do this for me?"
+                endRandom
+            Elseif Random(0,100) < CurrentCompanion:interpersonal
+                "<CurrentCompanion.name> answered a few comments, gave some likes and added some emoticons here and there. After a while <CurrentCompanion.he_or_she> looks at you very pleased."
+                If CurrentCompanion:masochist < masochist && CurrentCompanion:perversion < 35 && ownsAgency == 0
+                    Random
+                        CurrentCompanion(Disgusted):: "This is a waste of time, others pay for me and they can jerk off on my photos for free."
+                        CurrentCompanion(Disgusted):: "Mhf ..."
+                        CurrentCompanion(Disgusted):: "..."
+                        CurrentCompanion(Disgusted):: "Happy?"
+                    endRandom
+                Elseif CurrentCompanion:perversion < 35 && CurrentCompanion:instaglamfollowers > 50 && ownsAgency == 0
+                    Random
+                        CurrentCompanion(Disgusted):: "They're all just trying to get into my <CurrentCompanion.underwear_or_panties> ..."
+                        CurrentCompanion(Disgusted):: "It's boring, all they think about is fucking ..."
+                        CurrentCompanion(Disgusted):: "If it weren't for the money ..."
+                    endRandom
+                Elseif CurrentCompanion:perversion > 65 && CurrentCompanion:instaglamfollowers > 50 && ownsAgency == 0
+                    Random
+                        CurrentCompanion(Happy):: "Really cute how they all have a crush on me ..."
+                        CurrentCompanion(Happy):: "It's actually hilarious how they're all trying to get into my <CurrentCompanion.underwear_or_panties>."
+                        CurrentCompanion(Happy):: "Somehow these <CurrentCompanion.girls_or_guys> are all really cute. Maybe we should invite someone at some point?"
+                        CurrentCompanion(Happy):: "They are really crazy about me, I wonder if they would pay for my used <CurrentCompanion.underwear_or_panties>?"
+                    endRandom
+                Elseif ownsAgency == 1
+                    Random
+                        CurrentCompanion(Happy):: "Easy ..."
+                        CurrentCompanion(Happy):: "..."
+                        CurrentCompanion(Happy):: "Business as usual ..."
+                        CurrentCompanion(Happy):: "Done."
+                    endRandom
+                Endif
+                AddFollowers = true
+                passTime(0.1,0.5)
+            Else
+                "<CurrentCompanion.name> answered a few comments. After a while, <CurrentCompanion.he_or_she> gives you a questioning look ..."
+                AddFollowersLow = true
+                passTime(0.1,0.5)
+            Endif
+        Elseif 1
+            Selfie += 1
+            If CurrentCompanion:perversion < 25 && CurrentCompanion:masochist < masochist && ownsAgency == 0
+                CurrentCompanion():: "I don't want."
+            Elseif ownsAgency == 0 && [CurrentCompanion:age > 50 || CurrentCompanion:intelligence < 25]
+                Random
+                    CurrentCompanion():: "This is too complicated for me. Can you help me?"
+                    CurrentCompanion():: "This is not made for me. Can you help me please?"
+                    CurrentCompanion():: "I don't understand this. Can you help me please?"
+                    CurrentCompanion():: "Maybe you can do this for me?"
+                endRandom
+            Elseif CurrentCompanion:perversion < 25 && CurrentCompanion:masochist > masochist && ownsAgency == 0
+                CurrentCompanion(Anxious):: "Do I really have to do this?"
+                "<CurrentCompanion.name> tries pretty hard to make some sexy selfies of <CurrentCompanion.him_or_her>self. But it seems <CurrentCompanion.he_or_she> is not very happy with it."
+                AddFollowersLow = true
+                passTime(0.1,0.5)
+            Elseif ownsAgency == 1
+                Random
+                    "Without warning, <CurrentCompanion.he_or_she> turns around, exposes <CurrentCompanion.his_or_her> pussy and takes a picture of it."
+                    "Without warning <CurrentCompanion.he_or_she> opens <CurrentCompanion.his_or_her> <CurrentCompanion.shirt_or_blouse>, exposes <CurrentCompanion.his_or_her> <CurrentCompanion.chest_or_tits> and takes a picture of it."
+                    "<CurrentCompanion.He_or_She> picks up <CurrentCompanion.his_or_her> phone and makes some very obscene gestures in the camera while taking some pictures of <CurrentCompanion.him_or_her>self."
+                    "Without warning, <CurrentCompanion.he_or_she> turns around, exposes <CurrentCompanion.his_or_her> ass, grabs <CurrentCompanion.his_or_her> cheeks, spreads <CurrentCompanion.his_or_her> anus wide and asks you to take a picture of it."
+                endRandom
+                Random
+                    CurrentCompanion(Happy):: "Easy ..."
+                    CurrentCompanion(Happy):: "..."
+                    CurrentCompanion(Happy):: "Business as usual ..."
+                    CurrentCompanion(Happy):: "Done."
+                endRandom
+                AddFollowers = true
+                passTime(0.1,0.5)
+            Elseif CurrentCompanion:perversion > 75 && CurrentCompanion:instaglamfollowers > 50
+                Random
+                    "Without warning, <CurrentCompanion.he_or_she> turns around, exposes <CurrentCompanion.his_or_her> ass and takes a picture of it."
+                    "Without warning <CurrentCompanion.he_or_she> opens <CurrentCompanion.his_or_her> <CurrentCompanion.shirt_or_blouse>, exposes <CurrentCompanion.his_or_her> <CurrentCompanion.chest_or_tits> and takes a picture of it."
+                    "<CurrentCompanion.He_or_She> picks up <CurrentCompanion.his_or_her> phone and makes some obscene gestures in the camera while taking some pictures of <CurrentCompanion.him_or_her>self."
+                    "I already have a few ... I made them out of boredom the other day. I'll upload them, I only have to censor my <CurrentCompanion.face_or_boobs>."
+                    "Somewhere I have some nude photos from yesterday. Wait .... here. We'll take them."
+                endRandom
+                AddFollowersHigh = true
+                passTime(0.1,0.5)
+            Elseif CurrentCompanion:interpersonal > 65 || CurrentCompanion:attractiveness > 65
+                "Without much effort <CurrentCompanion.he_or_she> reaches for <CurrentCompanion.his_or_her> mobile phone and takes a few really nice photos. Some are really great."
+                AddFollowers = true
+                passTime(0.1,0.5)
+            Else
+                "<CurrentCompanion.He_or_She> takes <CurrentCompanion.his_or_her> cell phone and takes some pictures of <CurrentCompanion.him_or_her>self. Nothing special, but at least quite nice."
+                AddFollowersLow = true
+                passTime(0.1,0.5)
+            Endif
+        Elseif 2
+            "You upload one of the photos to Instaglam ..."
+            Photos +=1
+            If Photos < Random(0,3)
+                AddFollowers = true
+            Else
+                "No reaction ..."
+            Endif
+            StockPhotos -= 1
+            CurrentCompanion:stock_sexyphoto -= 1
+            passTime(0.1,0.5)
+        Elseif 3
+            "You upload one of the videos to Instaglam ..."
+            Videos +=1
+            If Videos < Random(0,3)
+                AddFollowers = true
+            Else
+                "No reaction ..."
+            Endif
+            StockVideos -= 1
+            CurrentCompanion:stock_sexyvideo -= 1
+            passTime(0.1,0.5)
+        Elseif 4
+            Chat += 1
+            If CurrentCompanion:interpersonal < 35 && CurrentCompanion:masochist > masochist && ownsAgency == 0
+                CurrentCompanion(Anxious):: "Do I really have to do this?"
+                "<CurrentCompanion.name> tries to chat with <CurrentCompanion.his_or_her> fans, but it seems <CurrentCompanion.he_or_she> is not very happy with it."
+                AddFollowersLow = true
+                passTime(0.1,0.5)
+            Elseif CurrentCompanion:perversion < 25 && CurrentCompanion:interpersonal < 35 && CurrentCompanion:masochist < masochist && ownsAgency == 0
+                CurrentCompanion(Angry):: "This is stupid! I don't want."
+                Chat += 10
+                passTime(0.1,0.5)
+            Elseif ownsAgency == 0 && [CurrentCompanion:age > 50 || CurrentCompanion:intelligence < 25]
+                Random
+                    CurrentCompanion():: "This is too complicated for me."
+                    CurrentCompanion():: "This is not made for me. I can't do this alone."
+                    CurrentCompanion():: "I can't do this alone."
+                endRandom
+                Chat += 10
+                passTime(0.1,0.5)
+            Elseif Random(0,100) < CurrentCompanion:interpersonal
+                "<CurrentCompanion.name> started a group chat with <CurrentCompanion.his_or_her> fans and after a while <CurrentCompanion.he_or_she> looks at you very pleased."
+                If CurrentCompanion:masochist < masochist && CurrentCompanion:perversion < 35 && ownsAgency == 0
+                    Random
+                        CurrentCompanion(Disgusted):: "This is a waste of time, others pay for me and they can jerk off on my photos for free."
+                        CurrentCompanion(Disgusted):: "Mhf ..."
+                        CurrentCompanion(Disgusted):: "..."
+                        CurrentCompanion(Disgusted):: "Happy?"
+                    endRandom
+                Elseif CurrentCompanion:perversion < 35 && CurrentCompanion:instaglamfollowers > 50 && ownsAgency == 0
+                    Random
+                        CurrentCompanion(Disgusted):: "They're all just trying to get into my <CurrentCompanion.underwear_or_panties> ..."
+                        CurrentCompanion(Disgusted):: "It's boring, all they think about is fucking ..."
+                        CurrentCompanion(Disgusted):: "If it weren't for the money ..."
+                    endRandom
+                Elseif CurrentCompanion:perversion > 65 && CurrentCompanion:instaglamfollowers > 50 && ownsAgency == 0
+                    Random
+                        CurrentCompanion(Happy):: "Really cute how they all have a crush on me ..."
+                        CurrentCompanion(Happy):: "It's actually hilarious how they're all trying to get into my <CurrentCompanion.underwear_or_panties>."
+                        CurrentCompanion(Happy):: "Somehow these <CurrentCompanion.girls_or_guys> are all really cute. Maybe we should invite someone at some point?"
+                        CurrentCompanion(Happy):: "They are really crazy about me, I wonder if they would pay for my used <CurrentCompanion.underwear_or_panties>?"
+                    endRandom
+                Elseif ownsAgency == 1
+                    Random
+                        CurrentCompanion(Happy):: "Easy ..."
+                        CurrentCompanion(Happy):: "..."
+                        CurrentCompanion(Happy):: "Business as usual ..."
+                        CurrentCompanion(Happy):: "Done."
+                    endRandom
+                Endif
+                // patched removed Endif
+                AddFollowers = true
+                passTime(0.1,0.5)
+            Else
+                "<CurrentCompanion.name> started to chat with <CurrentCompanion.his_or_her> fans. After a while, <CurrentCompanion.he_or_she> gives you a questioning look ..."
+                AddFollowersLow = true
+                passTime(0.1,0.5)
+            Endif
+        Else
+            Instaglam = false
+        Endif
+
+        If AddFollowersLow
+            NewFollowers = 0
+            Random
+                NewFollowers += CurrentCompanion:pornfame*(CurrentCompanion:attractiveness/10)-Random(0,100)
+                NewFollowers += CurrentCompanion:prostitutefame*(CurrentCompanion:attractiveness/10)-Random(0,100)
+                NewFollowers += CurrentCompanion:modelfame*(CurrentCompanion:attractiveness/10)-Random(0,100)
+            endRandom
+            NewFollowers = NewFollowers/Random(1,2)
+            If NewFollowers > 0
+                "<CurrentCompanion.He_or_She> got <NewFollowers> new followers."
+                CurrentCompanion:instaglamfollowers += NewFollowers
+                CurrentCompanion:pornfame += Random(0,0.03)
+                CurrentCompanion:prostitutefame += Random(0,0.03)
+                CurrentCompanion:modelfame += Random(0,0.03)
+            Else
+                "No reaction ..."
+            Endif
+            AddFollowersLow = false
+        Endif
+        If AddFollowers
+            NewFollowers = 0
+            Random
+                NewFollowers += CurrentCompanion:pornfame*(CurrentCompanion:attractiveness/10)-Random(0,100)
+                NewFollowers += CurrentCompanion:prostitutefame*(CurrentCompanion:attractiveness/10)-Random(0,100)
+                NewFollowers += CurrentCompanion:modelfame*(CurrentCompanion:attractiveness/10)-Random(0,100)
+            endRandom
+            If NewFollowers > 0
+                "<CurrentCompanion.He_or_She> got <NewFollowers> new followers."
+                CurrentCompanion:instaglamfollowers += NewFollowers
+                CurrentCompanion:pornfame += Random(0,0.08)
+                CurrentCompanion:prostitutefame += Random(0,0.08)
+                CurrentCompanion:modelfame += Random(0,0.08)
+            Else
+                "No reaction ..."
+            Endif
+            AddFollowers = false
+        Endif
+        If AddFollowersHigh
+            NewFollowers = 0
+            Random
+                NewFollowers += CurrentCompanion:pornfame*(CurrentCompanion:attractiveness/10)-Random(0,100)
+                NewFollowers += CurrentCompanion:prostitutefame*(CurrentCompanion:attractiveness/10)-Random(0,100)
+                NewFollowers += CurrentCompanion:modelfame*(CurrentCompanion:attractiveness/10)-Random(0,100)
+            endRandom
+            NewFollowers = NewFollowers*Random(1,2)
+            If NewFollowers > 0
+                "<CurrentCompanion.He_or_She> got <NewFollowers> new followers."
+                CurrentCompanion:instaglamfollowers += NewFollowers
+                CurrentCompanion:pornfame += Random(0,0.15)
+                CurrentCompanion:prostitutefame += Random(0,0.15)
+                CurrentCompanion:modelfame += Random(0,0.15)
+            Else
+                "No reaction ..."
+            Endif
+            AddFollowersHigh = false
+        Endif
+
+    Endwhile
+
+    SceneEnd()
+
+    YourProstitute.dress()

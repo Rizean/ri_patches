@@ -1,0 +1,7 @@
+MODULE_UNIQUEID: ri_patch_vin_Base
+MODULE_NAME: Patch - Base Gameplay Module
+MODULE_AUTHOR: Rizean
+MODULE_LINK: https://github.com/Rizean/ri-patches
+MODULE_DESCRIPTION: Patches for know bugs
+MODULE_REQUIREMENTS: sb_TheNewGoodbye
+MODULE_VERSION: p3.18
