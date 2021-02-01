@@ -12,8 +12,8 @@
   "scripts": {
     "build": "node_modules/.bin/lpbuilder build ./src/ri_patches ./build --ufe",
     "watch": "node_modules/.bin/lpbuilder watch ./src ./dist/ri_patches --ufe",
-    "packageold": "powershell \"Compress-Archive -Force ./src/ri_patches ./dist/ri_patches.zip\"",
-    "package": "powershell \"wsl ./scripts/package.sh\""
+    "packageold": "powershell \"wsl ./scripts/package.sh\"",
+    "package": "powershell \"wsl -d Ubuntu ./scripts/package.sh\""
   },
   "devDependencies": {
     "lp-builder": "^0.5.11"

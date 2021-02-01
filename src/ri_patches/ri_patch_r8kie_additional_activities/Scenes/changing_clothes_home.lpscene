@@ -1,0 +1,60 @@
+WHAT: all, -sleep, -nap
+WHERE: home
+WHEN: 0 - 24
+WHO: Actor = getRelative(); If Actor.livesWithPlayer() && Random(0,100) < 10;  // patcher replaced {&& &&} with {&&}
+OTHER: isAtHome() 
+
+SceneStart()
+    Actor.dressExcept(Outerwear, Top, Bottom, Headwear)
+    "You hear some noises from the <actor.relationship>'s room"
+    0:: "Inspect"
+    1:: "Move along"
+    
+    If 0
+        "You see that door aren't completly closed and the <actor.name> change clothes."
+        0:: perversion >10 :: "Have some show"
+        1:: "Close the door"
+        
+        If 0 
+            Actor.show(3)
+            Actor(Sad):: "That was long and hard day..."
+            if sneak < Random(0,100) + Actor:rapportwithplayer
+                Actor.stripOne()
+                Actor(Happy):: "Off you go."
+            Endif
+            Actor():: "I wish some message will be very pleasant."
+            0:: isModEnabled(vin_Incest) && Actor:incest > 30 && perversion > 30 :: "Knock the door and offer naked message"
+            1:: "Knock the door and offer message"
+            2:: "Watch from behind the door"
+            3:: "Leave"
+            
+            If 0
+                "You knock at the door frame."
+                Player(Excited):: "You look tired. Do you want some extra relaxing mesage?"
+                Actor(Flirty):: "I just lay on my bed and let you work."
+                Actor.strip()
+                Sex(Player, Actor)
+                Actor:incest += Random(2,3)
+                perversion += Random(2,3)
+            Elseif 1 
+                "You knock at the door frame."
+                Player(Excited):: "You look tired. Do you want nome relaxing mesage?"
+                Actor(Tired):: "I just lay on my bed and let you work."
+                Actor:rapportwithplayer += Random(0,1)
+            Elseif 2
+                "<Actor.name> just grab somethin from the night desk and start some fun."
+                Actor.strip()
+                Actor.show(2)
+                Filter(Solo)
+                Sex(Actor)
+            Endif
+        Else
+            "You just go back to your chores."
+        Endif
+    Else
+        "You close the door and leave <Actor.relationship> in peace."
+        perversion -=Random(1,2)
+    Endif
+    
+    SceneEnd()
+    timeout(500, changing_clothes_home)

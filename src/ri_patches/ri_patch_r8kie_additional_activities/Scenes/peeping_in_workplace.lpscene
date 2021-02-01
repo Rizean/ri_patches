@@ -1,0 +1,254 @@
+WHAT: all
+WHERE: work
+WHEN: 0 - 24
+WHO: Actor = getSpecific(Colleague); Random(1, 100) > 80
+OTHER: none 
+
+    SceneStart()
+    "You saw that the <Actor.name> is in hurry walking to the restroom."
+    Actor.dress()
+    Actor.show(4)
+    Actor.hide() // patcher replaced {Actor.hide} with {Actor.hide()}
+    Actor.show(2)
+    Actor.hide() // patcher replaced {Actor.hide} with {Actor.hide()}
+
+    0:: "It's normal to use restroom in workplace."
+    1:: perversion >10 :: "Let have some fun."
+    
+    If 0
+        "Maybe <Actor.name> want some refreshing or to contemplate."
+    Else
+        Player():: "Lets have a look."
+        "You go to the restroom just after the <Actor.name>."
+        setBackground(toilets)
+        If !Actor.isDating()
+            Actor.show(1)
+            "You saw that <Actor.name> go to the cabin."
+            Actor.hide()
+            
+            0:: "Use the left stall"
+            1:: "Use the right stall"
+            2:: perversion > 20 :: "Peep over the door"
+            
+            If 0 && Actor:perversion >30 && Random(1, 100) <50
+                "You hear a soft moan coming from the next stall."
+                "You can only daydreaming of having sex with the <Actor.name>."
+                perversion+= Random(0,1)
+            elseIf 0 
+                "You just hear some water runing noises."
+                "After minute you can hear water flushing."
+            elseIf 1 && Actor:perversion >30 && Random(1, 100) < 50
+                "You clearly hear a soft moan from the next stall."
+                "There is a hidden gloryhole..."
+                0:: "Take a look"
+                1:: Player.isMale() && isModEnabled(vin_VanillaPorn):: "Put your dick inside."
+                2:: isModEnabled(vin_VanillaPorn):: "Put your mouth to the hole."
+                
+                If 0 
+                    "You can see that <Actor.name> is masturbating."
+                    Filter(Solo)
+                    Sex(Actor)
+                    Actor:perversion += Random(1, 3)
+                    perversion += Random(1, 3)
+                    "WOW that was one hot show."
+                elseIf 1
+                    "You put your dick to the hole."
+                    "After a while you can feel wet lips on it."
+                    Filter(Blowjob)
+                    Sex(Player, Actor)
+                    "After the service you go back to the work."
+                    Actor:perversion += Random(3, 6)
+                    perversion += Random(3, 6)
+                else 
+                    "You lick your lips and put your mouth next to the glory hole."
+                    "After a second you can feel it."
+                    if Actor.isMale() 
+                        Filter(Blowjob)
+                    else 
+                        Filter(Licking)
+                    Endif
+                    Sex(Actor, Player)
+                    Actor:perversion += Random(3, 6)
+                    perversion += Random(3, 6)
+                Endif
+            elseIf 1 
+                "You just hear some water runing noises."
+                "After minute you can hear water flushing."
+            elseIf 2 && Actor:perversion > 40
+                SneakGame()
+                If Random(0, 100) < sneak
+                    "The stall door wasn't locked."
+                    Actor.show(1)
+                    Actor(happy):: "I just wanted to have some fun, but now i will have some extra."
+                    "<Actor.name> close the stall dors and put a finger on your lips."
+                    Actor():: "Shhhh let have some fun."
+                    Sex(Actor, Player)
+                    Actor:rapportwithplayer += Random(1, 4)
+                    Actor:perversion += Random(3, 6)
+                    perversion += Random(3, 6)
+                elseIf Actor:perversion >30 && Random(1, 100) > 50
+                    "The stall door wasn't obstacle for your sight."
+                    Filter(Solo)
+                    Actor:perversion += Random(1, 3)
+                    perversion += Random(1, 3)
+                    SneakGame()
+                    If Random(0, 100)< sneak
+                        "You manage to silently go back to work."
+                    Else
+                        Actor.show(4)
+                        Actor(Angry):: "Do you peeping?! Shame on you!"
+                        Actor:rapportwithplayer -= Random(10, 30)
+                    Endif
+                Else 
+                    "<Actor.name> go just for a quick brake and you don't manage to see anything"
+                    Actor.show(1)
+                    Actor():: "There asre some ASAPs and FUBARs and i don't have time for this shit."
+                    Actor.hide()
+                Endif
+            Endif
+        Else
+            Actor.show(2)
+            Actor2 = Actor.getRelatedPerson(Spouses, Dating)
+            Actor2.dress()
+            Actor2.show(1)
+            "You saw that <Actor.name> go into one cabin with <Actor2.name>."
+            Actor2.hide()
+            Actor.hide()
+            
+            0:: "Evesdrop"
+            1:: "Use left stall"
+            2:: "Use right stall"
+            3:: perversion > 30 "Peep over the door"
+            
+            If 0
+                Actor():: "You shouldn't be here."
+                Actor2():: "It's urgent situation."
+                "You can hear zipper and some cloth removal."
+                Actor():: "Oh my god sooo big."
+                Actor2():: "Come over here."
+                "You can hear some munching and moaning. Unfortunately there is no option to peep. After a while you leave and get back to work."
+                Actor:perversion += Random (1, 3)
+                Actor2:perversion += Random (1, 3)
+                arousal += Random(2, 5)
+            elseIf 1
+                "You go lo the left stall. You can hear more clearly the pair near you."
+                                Actor():: "You shouldn't be here."
+                Actor2():: "It's urgent situation."
+                "You can hear zipper and some cloth removal."
+                Actor():: "Oh my god sooo big."
+                Actor2():: "Come over here."
+                "You can hear some munching and moaning. Unfortunately there is no option to peep." 
+                Actor():: "Do me as a filthy whore..."
+                Actor2():: "Get over here."
+                "After a while you leave and get back to work."
+                If !Actor.isMale() && Actor2.isMale() 
+                    Actor.ipregnate(Actor2)
+                Endif
+                If Actor.isMale() && !Actor2.isMale() 
+                    Actor2.ipregnate(Actor)
+                Endif
+                arousal += Random(2, 5)
+                Actor:perversion += Random(2, 5)
+                Actor2:perversion += Random(2, 5)
+            elseIf 2
+                "You go lo the right stall. You can hear more clearly the pair near you."
+                Actor():: "You shouldn't be here."
+                Actor2():: "It's urgent situation."
+                "You can hear zipper and some cloth removal."
+                Actor():: "Oh my god sooo big."
+                Actor2():: "Come over here."
+                "You can hear some munching and moaning. You can see a hidden gloryhole." 
+                Actor():: "Do me as a filthy whore..."
+                Actor2():: "Get over here."
+                Filter(standing)
+                sex(Actor, Actor2)
+                "After a while you leave and get back to work."
+                arousal+= Random(10, 20)
+                perversion += Random(1, 4)
+                Actor:perversion += Random(3, 6)
+                Actor2:perversion += Random(3, 6)
+            elseIf 3
+                SneakGame()
+                If Random(0, 100) < sneak && Random(0, 100) < sneak
+                    "The stall door wasn't locked."
+                    Actor.show(1)
+                    Actor2.show(2)
+                    If Actor:perversion > 50 && Actor2:perversion > 50
+                        Actor():: "<Actor2.name> want more fun?"
+                        Actor2():: "It will be hot."
+                        Actor():: "<Player.name> don't be shy."
+                        "<Actor.name> pull you inside and close the door."
+                        sex(Player, Actor, Actor2)
+                        perversion += Random(3, 6)
+                        Actor:perversion += Random(3, 6)
+                        Actor2:perversion += Random(3, 6)
+                        Actor:rapportwithplayer += Random(1, 4)
+                        Actor2:rapportwithplayer += Random(1, 4)
+                        "After the hot action you go back to the work."
+                        If Random(1, 100) < 10
+                            "There was some evil eyes that watch and speek some words to the boss."
+                            "Next day you woke up as a unemployed."
+                            loseJob()
+                        Endif
+                    Else 
+                        Actor():: "What are you doing <Player.name>?"
+                        Actor2():: "Do you know this <Player.idiot_or_bitch>?"
+                        Actor():: "Yes, <Player.o> is working in the other team."
+                        Actor2():: "Beat it kid or i'll shit on your grave..."
+                        
+                        0:: "Fight"
+                        1:: "Leave"
+                        
+                        If 0 && martial > [Actor:martial + Actor2:martial]/2
+                            "You quickly hit both of the opponents in the vital spots."
+                            Actor:rapportwithplayer -= Random(50, 100)
+                            Actor2:rapportwithplayer -= Random(50, 100)
+                            
+                            0:: "Have sex with <Actor.name>." // patcher replaced {0 ::} with {0::}
+                            1:: "Have sex with <Actor2.name>." // patcher replaced {1 ::} with {1::}
+                            2:: "Leave" // patcher replaced {2 ::} with {2::}
+                            
+                            If 0 
+                                "I'll take you for a ride."
+                                sex(Actor, Player)
+                                If Random(1, 100) < 50
+                                    "The boss have been informed of your agrresive act, and fired you immidietly."
+                                    jobexperience -= Random(10, 20)
+                                    loseJob()
+                                    mood -= Random(20, 50)
+                                Endif
+                                jobexperience -= Random(10, 20)
+                            elseIf 1
+                                "I'll take you for a ride."
+                                sex(Actor2, Player)
+                                If Random(1, 100) < 50
+                                    "The boss have been informed of your agrresive act, and fired you immidietly."
+                                    jobexperience -= Random(20, 30)
+                                    loseJob()
+                                    mood -= Random(20, 50)
+                                Endif
+                                jobexperience -= Random(20, 30)
+                            else
+                                "You leave both of them unconsciously laying on the floor."
+                                If Random(1, 100) < 10 
+                                    "The boss have been informed of your agrresive act, and fired you immidietly."
+                                    jobexperience -= Random(0, 10)
+                                    loseJob()
+                                    mood -= Random(20, 50)
+                                Endif
+                            Endif
+                        Else
+                            "You leave both of them. After that they quicly close and lock the stall door."
+                            Actor:rapportwithplayer -= Random(10, 20)
+                            Actor2:rapportwithplayer -= Random(10, 20)
+                        Endif
+                    Endif
+                Else
+                    "Your efforts made too much noise and you quickly walk away back to work."
+                Endif
+            Endif
+        Endif
+    Endif
+    
+    SceneEnd()
+    timeout(500, peeping_in_workplace)

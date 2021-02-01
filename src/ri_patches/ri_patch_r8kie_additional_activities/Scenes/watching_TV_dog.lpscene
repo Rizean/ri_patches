@@ -1,0 +1,60 @@
+WHAT: watch_tv, watch_sport_in, watch_a_movie_in
+WHERE: home
+WHEN: 0 - 24
+WHO: Actor = getCreature(); If Actor.isCreatureType(Dog) && Random(0, 100) < 10
+OTHER: isAtHome() 
+
+    SceneStart()
+    Actor.show(1)
+    Player(Happy):: "Finally my favorite show."
+    Actor(Happy):: "Woof Woof"    
+
+    0:: "<Actor.name> be quiet! This is the best part!"
+    1:: "Clap the sofa"
+    2:: "Throw the <Actor.name>'s ball to the other room." 
+    
+    If 0
+        Player(Upset):: "<Actor.name> be quiet! This is the best part!"
+        Actor.hide()
+        "The <Actor.name> get out of sight imiedietly."
+        Actor:rapportwithplayer -= Random(1,2)
+    Elseif 1
+        "I clap the sofa."
+        Player():: "Come here <Actor.name>."
+        Actor.hide()
+        Actor.show(4)
+        "We both are watching the show in peace."
+        Actor:rapportwithplayer += Random(1,2)
+        Actor.hide()
+        0:: isModEnabled(vin_Bestiality) && Actor:perversion >50 && perversion > 50 :: "Time for some extra fun"
+        1:: "That was a good show"
+        
+        If 0 
+            Player(Flirty):: "Who was good dogy?"
+            Actor:: "Wuff! Wuff! Wuff!"
+            Sex(Actor, Player)
+            perversion += Random(0, 2)
+            Actor:attractiontoplayer += Random(0, 2)
+        Elseif 1
+            Player(Happy):: "Yes that was a good show." // patcher replaced {Player(Happy)} with {Player(Happy)::}
+        Endif
+    Else
+        Ball_Repeat = Random(2,5)
+        Ball_Throw = 1
+        "I throw the <Actor.name>'s ball to the other room."
+        Actor.hide()
+        mood -= Random(0,1)
+        While Ball_Throw < Ball_Repeat
+                "After a while the <Actor.name> return to me with the ball."
+                Actor:rapportwithplayer += Random(1,2)        
+                Actor.show(3)
+                Ball_Throw += 1
+                "I throw the <Actor.name>'s ball to the other room one more time."
+                Actor.hide()
+                mood -= Random(0,1)
+        endWhile
+        "Finally I can see my show."
+    Endif
+    
+    SceneEnd()
+    timeout(500, watching_TV_dog)
