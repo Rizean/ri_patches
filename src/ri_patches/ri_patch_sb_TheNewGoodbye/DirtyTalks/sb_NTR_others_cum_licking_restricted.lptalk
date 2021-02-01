@@ -1,0 +1,56 @@
+*START* Tag(Licking) && A1.isPlayer() && !A2.isDating() 
+    ...
+    Now taste me!
+##
+Tag(Licking) && A1.isPlayer() && !A2.isDating()
+    ...
+    It feels too good. 
+##
+*START* Tag(Licking) && A1.isPlayer() && !A2.isDating() && masochist > 50 
+    You know I do ...
+    Do you like to lick this pussy?
+##
+*END* Tag(Couple) && A1.isPlayer() && !A2.isDating()
+    Did you enjoy it? 
+    Oh baby, don't worry ... 
+##
+*START* Tag(Licking) && A1.isPlayer() && !A2.isDating()
+    ...
+    Mmmhhh yes ... lick my pussy ... can you taste it?
+##
+*START* Tag(Licking) && A1.isPlayer() && !A2.isDating()
+    ...
+    Oohhh yes baby ... lick all the cum out of me! Clean me up!
+##
+Tag(Licking) && A1.isPlayer() && !A2.isDating() && masochist > 30
+    ...
+    Oohhh yes yes... lick all that cum out of me!
+##
+Tag(Licking) && A1.isPlayer() && !A2.isDating() && masochist > 30 // patcher replaced {&& &&} with {&&}
+    Mmmmh ...
+    Oh baby... tell me ... how does my pussy taste with all that cum?
+##
+Tag(Licking) && A1.isPlayer() && !A2.isDating()
+    (Slurping) ...
+    Lick out every drop. Stick your tongue in too ... get deep ... Get everything baby.
+##
+Tag(Licking) && A1.isPlayer() && !A2.isDating() && toCum > 50
+    ...
+    Oh yes baby, lick that cum filled pussy faster! Make me cum ...
+##
+*END* Tag(Licking) && A1.isPlayer() && !A2.isDating()
+    Oh baby ...
+    Good boy! That was very good ... you really enjoy cum eating, am I right?
+##
+*END* Tag(Licking) && A1.isPlayer() && !A2.isDating() && A2:masochist < -75
+    Oh baby ...
+    Good boy! That was very good ... did you enjoy your meal?
+##
+*END* Tag(Licking) && A1.isPlayer() && !A2.isDating() && masochist > 50
+    Thank you baby!
+    You know how to lick a pussy ... 
+##
+*START* Tag(Licking) && A1.isPlayer() && !A2.isDating()
+    Mmhhh ... 
+    You really enjoy licking all this cum out of me, right?
+##

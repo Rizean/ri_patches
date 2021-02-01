@@ -1,0 +1,355 @@
+WHAT: none
+WHERE: none
+WHEN: 0-24
+WHO: none
+OTHER: none
+
+    SceneStart()
+    // setBackground(doctor)
+    setBackground3D(Modules/sb_BetterPregnancy/Bedrooms/WaitingRoom00.lpworld)
+    
+    "I asked for a pregnancy check for me."
+    
+    AbortionPrice = 1200
+    AbortionPriceConverted = AbortionPrice.convertToLocalCurrency(true)
+    BKnowsAboutPregnancy = KnowsAboutPregnancy.getGlobal()
+    pregday = Player.countPregnancyDays()
+    
+    // Fertility System
+    If Player:fertility_system == 100 && Player:age > 46 && pregday < 60 && Player.isPregnant() && BKnowsAboutPregnancy > 0
+        Player.endPregnancy()
+    Endif
+    
+    // setBackgroundCustom(sb_doctor_gynecologist)
+    setBackground3D(Modules/sb_BetterPregnancy/Bedrooms/DoctorsRoom00.lpworld)
+    
+    If Player.isMale()
+        Nurse = generatePersonTemporary()
+        Random
+            Nurse.blendPreset(sb_BPR_underweight_F_daz)
+            Nurse.blendPreset(sb_BPR_shapely_F_daz)
+        endRandom
+        Nurse.randomizeHairs()
+        Nurse.randomizeFace()
+        Nurse.SetJob(Nurse)
+        Nurse.dressUniform()
+        Nurse.show(2)
+        Nurse:: "I'm sorry. At the moment we offer only pregnancy checks for female patients ..."
+        
+        "Maybe I should ask for her number?"
+        0:: "Ask her for number"
+        1:: "Not interested"
+        
+        If 0
+            Player(Happy):: "Sorry if I'm being weird but I find you quite cute. Perhaps we could exchange numbers and hang out another day?"
+            If Nurse.IsInterestedIn(Player) && Nurse:attractiontoplayer > Random(0, 30)
+                Nurse(Surprised):: "Oh ... mmmh ... yeah, why not ... let's exchange contacts."
+                Nurse.makePermanent()
+                exchangeContact(Nurse)
+                
+            Else
+                Nurse(Irritated):: "I'm sorry, I don't normally exchange numbers with random people I met during work."
+                "Then <Nures.he_or_she> went off ..."
+            Endif
+            Nurse.hide()
+        Else
+            Nurse.hide()
+            If Random(0,100) > 90
+                // setBackgroundCustom(sb_doctor_waitingroom)
+                setBackground3D(Modules/sb_BetterPregnancy/Bedrooms/WaitingRoom00.lpworld)
+                "On your way out you take a look in the waiting room ..."
+                Preggo = generatePersonTemporary()
+                Preggo.blendPreset(sb_BPR_pregnant_full_F)
+                Preggo.blendPreset(sb_BPR_eyelashes_F)
+                Preggo.randomizeHairs()
+                Preggo.randomizeFace()
+                Preggo.dress()
+                Preggo.show(3)
+                Preggo():: "..."
+                Player():: "..."
+                Preggo():: "..."
+                If Preggo.IsInterestedIn(Player) && [Preggo:attractiontoplayer > Random(0, 30) || Preggo:arousal > Random(0, 30) || Preggo:perversion > Random(0, 75)]
+                    Preggo(Flirty):: "Are you waiting for someone?"
+                    Preggo(Flirty):: "Oh ... doesn't matter ... but maybe you can help me? My belly is sooo big and I need to use the restroom ..."
+                    Preggo(Flirty):: "It's hard to move ..."
+                    0:: "Be a gentleman and offer help!"
+                    1:: "Sorry, I need to get going ..."
+                    
+                    If 0
+                        "She stands up slowly, walks towards you and takes your hand ..."
+                        Preggo.show(4)
+                        Preggo(Flirty):: "The restroom is over there!"
+                        setBackgroundCustom(sb_office_bathroom)
+                        "Shortly after you entered the door she grabs you and pushes you against the wall ..."
+                        "You feel her belly pushing against your crotch ..."
+                        Player(Surprised):: "WTF?!"
+                        Preggo(Flirty):: "Sorry about this ... I'm soooo horny and my husband ... you know how pregnant women are ..."
+                        Player.dressExcept(Bottom, Underwear)
+                        "While she's still talking to you, she already opened your pants ... now holding your cock in her hand."
+                        Preggo(Flirty):: "Give it to me!"
+                        0:: "Oh hell yeah!"
+                        1:: "No way I'm doing that! You are crazy!"
+                        
+                        Husband = generatePersonTemporary()
+                        While !Husband.isMale()
+                            Husband = generatePersonTemporary()
+                        EndWhile
+                        Husband.randomizeHairs()
+                        Husband.randomizeFace()
+                        Husband.dress()
+                        If Random(0,100) > 50
+                            Husband():: "Honey, where are you??"
+                            Husband():: "Do you need help again to stand up?"
+                            "The door opens ..."
+                            Husband.show(1)
+                            Husband():: "You don't need to ask strangers to help you. I was just going to the bathroom ..."
+                            Preggo(Happy):: "Ahem ... yeah, thank you very much ... my husband can help me now."
+                        Else
+                            If 0
+                                Sex(Player, Preggo)
+                                passTime(0.5,1)
+                                setBackgroundCustom(sb_office_bathroom)
+                                Player.show(0)
+                                Preggo.show(4)
+                                Husband():: "Honey, where are you??"
+                                Husband():: "Do you need help again to stand up?"
+                                "The door opens ..."
+                                Husband.show(1)
+                                Preggo(Angry):: "This guy was molesting me!!"
+                            Endif
+                        Endif
+                        "And with these words you rush out of the restroom ... and out of clinic."
+                        Husband.hide()
+                        Preggo.hide()
+                    Endif
+                Endif
+            Else
+                // setBackgroundCustom(sb_doctor_waitingroom)
+                setBackground3D(Modules/sb_BetterPregnancy/Bedrooms/WaitingRoom00.lpworld)
+                "On your way out you take a look in the waiting room ..."
+                Preggo1 = generatePersonTemporary()
+                Random
+                    Preggo1.blendPreset(sb_BPR_pregnant_full_F)
+                    Preggo1.blendPreset(sb_BPR_pregnant_middle_F)
+                    Preggo1.blendPreset(sb_BPR_pregnant_low_F)
+                    Preggo1.blendPreset(sb_BPR_pregnant_full_F)
+                endRandom
+                Preggo1.blendPreset(sb_BPR_eyelashes_F)
+                Preggo1.randomizeHairs()
+                Preggo1.randomizeFace()
+                Preggo1.dress()
+                Preggo2 = generatePersonTemporary()
+                Random
+                    Preggo2.blendPreset(sb_BPR_pregnant_full_F)
+                    Preggo2.blendPreset(sb_BPR_pregnant_middle_F)
+                    Preggo2.blendPreset(sb_BPR_pregnant_low_F)
+                    Preggo2.blendPreset(sb_BPR_pregnant_full_F)
+                endRandom
+                Preggo2.blendPreset(sb_BPR_eyelashes_F)
+                Preggo2.randomizeHairs()
+                Preggo2.randomizeFace()
+                Preggo2.dress()
+                Preggo3 = generatePersonTemporary()
+                Random
+                    Preggo3.blendPreset(sb_BPR_pregnant_full_F)
+                    Preggo3.blendPreset(sb_BPR_pregnant_middle_F)
+                    Preggo3.blendPreset(sb_BPR_pregnant_low_F)
+                    Preggo3.blendPreset(sb_BPR_pregnant_full_F)
+                endRandom
+                Preggo3.blendPreset(sb_BPR_eyelashes_F)
+                Preggo3.randomizeHairs()
+                Preggo3.randomizeFace()
+                Preggo3.dress()
+                Preggo4 = generatePersonTemporary()
+                Random
+                    Preggo4.blendPreset(sb_BPR_pregnant_full_F)
+                    Preggo4.blendPreset(sb_BPR_pregnant_middle_F)
+                    Preggo4.blendPreset(sb_BPR_pregnant_low_F)
+                    Preggo4.blendPreset(sb_BPR_pregnant_full_F)
+                endRandom
+                Preggo4.blendPreset(sb_BPR_eyelashes_F)
+                Preggo4.randomizeHairs()
+                Preggo4.randomizeFace()
+                Preggo4.dress()
+                Preggo1.show(1)
+                Preggo2.show(2)
+                Preggo3.show(3)
+                Preggo4.show(4)
+                Preggo1():: "..."
+                Player():: "..."
+                Preggo2():: "..."
+                Preggo3():: "..."
+                Player():: "..."
+                Preggo4():: "..."
+                If Random(0,1000) > 998 && Player:masochist < 0 && Player:attractiveness > 75
+                    Player.hide()
+                    Preggo1.hide()
+                    Preggo2.hide()
+                    Preggo3.hide()
+                    Preggo4.hide()
+                    "A short moment later in the bathroom ..."
+                    setBackgroundCustom(sb_office_bathroom)
+                    Sex(Player, Preggo1, Preggo2, Preggo3, Preggo4)
+                    passTime(1,3)
+                Endif
+            Endif
+        Endif
+        Nurse.hide()
+        
+    Elseif CurrentCompanion.isPregnant()
+        Doctor = generatePersonTemporary()
+        Random
+            Doctor.blendPreset(sb_BPR_underweight_F_daz)
+            Doctor.blendPreset(sb_BPR_shapely_F_daz)
+        endRandom
+        Doctor.randomizeHairs()
+        Doctor.randomizeFace()
+        Doctor.setJob(Nurse)
+        Doctor.dress()
+        Doctor.dressUniform()
+        Doctor.show(2)
+        
+        Doctor(Happy):: "Congratulations <Player.Mr_or_Ms> <Player.name_last>! You are pregnant."
+        Doctor(Happy):: "It looks like that you are <pregday> days pregnant."
+        
+        Actor = getSpecific(CurrentBabyDaddy)
+        If Actor.isCreature()
+            karma -= Random(5,10)
+            "Because they suspected something, the doctor made a DNA test."
+            "The DNA test results baffled everyone. While the child is expected to be born healthy and normal, it apparently shares some non-human DNA. The doctors didn't suspect much though, even apologizing for what must have been an error in their testing process."
+            Actor.show(2)
+            "Of course, I know better!" 
+            "The baby is maybe the result of my pleasurable bestial adventures with <Actor.name>."
+            "I've been thoroughly bred like a bitch in heat, filled up with thick animal cum and this is now the outcome."
+                
+            0:: "Keep the baby, no matter what"
+            1:: "Ask for an abortion (<AbortionPriceConverted>)"
+            
+            If 1
+                If pregday > 160
+                    Doctor():: "I'm sorry <Player.Mr_or_Ms> <Player.name_last>, but we are offering abortions only up to 160 days."
+                    BKnowsAboutPregnancy = 100
+                    KnowsAboutPregnancy.setGlobal(BKnowsAboutPregnancy)
+                Elseif money < AbortionPrice
+                    "I don't have enough money for it! Damn."
+                    BKnowsAboutPregnancy = 100
+                    KnowsAboutPregnancy.setGlobal(BKnowsAboutPregnancy)
+                Else
+                    setBackground3D(Modules/sb_BetterPregnancy/Bedrooms/HospitalBedroom00.lpworld)
+                    "You paid for the abortion."
+                    "In the beginning you were a little worried about the procedure, but in the end everything went just fine."
+                    karma -= Random(5,10)
+                    money -= AbortionPrice
+                    fitness -= Random(0,5)
+                    attractiveness -= Random(0.2,0.5)
+                    sneak += Random(0,1)
+                    masochist += Random(0,1)
+                    Player.endPregnancy()
+                    passTime(1,3)
+                    KnowsAboutPregnancy.clearGlobal()
+                Endif
+            Else
+                Player():: "(I'll keep it. That's for sure.)"
+                BKnowsAboutPregnancy = 100
+                KnowsAboutPregnancy.setGlobal(BKnowsAboutPregnancy)
+            Endif
+            
+        Else
+            If BKnowsAboutPregnancy == 0
+            
+                // Fertility System
+                If Player:fertility_system == 100 && Player:age > 44
+                    "Ok, this is it! It's a strange feeling - I'm getting old, it could be the last time I'm pregnant."
+                Else
+                    "Ok, I'm pregnant. It's a strange feeling - I don't know if I should feel excited or terrified."
+                Endif
+                
+                If Actor.isDating()
+                    "I'm sure it's <Actor.name>'s baby!"
+                Elseif Actor.isCreature()
+                    "I better think of who could be the father of this child ... ohh it's maybe ... <Actor.name>?"
+                    "The baby is maybe the result of my pleasurable bestial adventures with <Actor.name>."
+                    "I've been thoroughly bred like a bitch in heat, filled up with thick animal cum and this is now the outcome."
+                Elseif !Actor.isContactExchanged() && !Actor.isRelative()
+                    "I don't know who the father is ..."
+                Elseif Actor.isAffair() && Player.hasRelationship(Dating, Spouses)
+                    "Okay ... I'm sure it's <Actor.name>'s baby."
+                Elseif Actor.isRelative()
+                    "God! I'm sure it's <Actor.name>'s baby!"
+                Elseif Actor.hasRelationship(Dating, Spouses) && !Actor.isDating()
+                    "Hmmmmm .... it could be from <Actor.name>!"
+                Endif
+                
+                If Actor.isRelative()
+                    "Or more precisely ... my own <Actor.relationship> is the father of the growing soul inside me!"
+                    "We did something forbidden and extremely risky that led to this baby. We can now only hope that the truth will never come out and the baby will somehow turn out to be healthy physically and mentally."
+                Elseif Actor.isExRelative()
+                    "As much as I'm happy to carry <Actor.name>'s child, <Actor.he_or_she> and I are biologically related after all ... Let's hope the baby will turn out to be healthy physically and mentally."        
+                Endif
+                
+                BKnowsAboutPregnancy = 100
+                KnowsAboutPregnancy.setGlobal(BKnowsAboutPregnancy)
+                
+            Else
+                "I knew already that I'm pregnant. But it's still don't know if I should feel excited or terrified."
+            Endif
+            
+            0:: "Keep the baby"
+            1:: [masochist < Actor:masochist || !Actor.isDating()]:: "Ask for an abortion (<AbortionPriceConverted>)"
+            
+            If 1
+                If pregday > 160
+                    Doctor():: "I'm sorry <Player.Mr_or_Ms> <Player.name_last>, but we are offering abortions only up to 160 days."
+                    BKnowsAboutPregnancy = 100
+                    KnowsAboutPregnancy.setGlobal(BKnowsAboutPregnancy)
+                Elseif money < AbortionPrice
+                    "I don't have enough money for it! Damn."
+                    BKnowsAboutPregnancy = 100
+                    KnowsAboutPregnancy.setGlobal(BKnowsAboutPregnancy)
+                Else
+                    setBackground3D(Modules/sb_BetterPregnancy/Bedrooms/HospitalBedroom00.lpworld)
+                    "You paid for the abortion."
+                    "In the beginning you were a little worried about the procedure, but in the end everything went just fine."
+                    karma -= Random(5,10)
+                    money -= AbortionPrice
+                    fitness -= Random(0,5)
+                    attractiveness -= Random(0.2,0.5)
+                    sneak += Random(0,1)
+                    masochist += Random(0,1)
+                    Player.endPregnancy()
+                    passTime(1,3)
+                    KnowsAboutPregnancy.clearGlobal()
+                Endif
+            Else
+                BKnowsAboutPregnancy = 100
+                KnowsAboutPregnancy.setGlobal(BKnowsAboutPregnancy)
+                If Actor.isDating()
+                    Player():: "(Maybe I should tell <Actor.name> about it?)"
+                Else
+                    Player():: "(I'll keep it. That's for sure.)"
+                Endif
+                
+            Endif
+        Endif
+        
+    Else
+        Doctor = generatePersonTemporary()
+        Random
+            Doctor.blendPreset(sb_BPR_underweight_F_daz)
+            Doctor.blendPreset(sb_BPR_shapely_F_daz)
+        endRandom
+        Doctor.randomizeHairs()
+        Doctor.randomizeFace()
+        Doctor.setJob(Nurse)
+        Doctor.dress()
+        Doctor.dressUniform()
+        Doctor.show(2) // patcher replaced {show(2))} with {show(2)}
+        
+        Doctor(Happy):: "I'm sorry <Player.Mr_or_Ms> <Player.name_last>, you are not pregnant."
+        Doctor(Happy):: "But maybe it's too early. If you want you can come back in a few days and we will do another check."
+        
+    Endif
+    
+    passTime(0.5,1)
+    
+    SceneEnd()

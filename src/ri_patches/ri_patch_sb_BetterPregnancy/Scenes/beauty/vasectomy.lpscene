@@ -1,0 +1,38 @@
+WHAT: none
+WHERE: none
+WHEN: 0-24
+WHO: none
+OTHER: none
+
+    SceneStart()
+    
+    VasectomyPrice = 1200
+    VasectomyPriceConverted = VasectomyPrice.convertToLocalCurrency(true)
+    
+    setBackground3D(Modules/sb_BetterPregnancy/Bedrooms/DoctorsRoom00.lpworld)
+    
+    If Player.isFemale()
+         "They told me that a vasectomy can only be done to men. I didn't know!"
+        intelligence -= Random(0,0.1) 
+        passTime(0.1,0.5)
+        
+    Elseif Player:vasectomy == 0
+        "Do I really want a vasectomy (<VasectomyPriceConverted>)?"
+        0:: "Yes"
+        1:: "No" // patcher replaced {1:.} with {1::}
+        
+        If 0
+            "Everything went fine. It took a while, but it wasn't as painful as expected ..."
+            fertility => 0
+            vasectomy => 100
+            money -= VasectomyPrice
+        Endif
+        passTime(1,3)
+        
+    Else
+        "They told me that I already had a vasectomy."
+        intelligence -= Random(0,0.1)
+        passTime(0.1,0.5)
+    Endif
+    
+    SceneEnd()

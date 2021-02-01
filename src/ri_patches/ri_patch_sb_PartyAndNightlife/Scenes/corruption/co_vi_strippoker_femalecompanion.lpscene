@@ -1,0 +1,242 @@
+WHAT: all, -go_to_the_bathroom, -dance, -have_a_meal, -have_a_snack, -sleep, -sleep_hotel, -organize_a_house_party
+WHERE: all -home
+WHEN: 17-23
+WHO: Actor = getCompanion(); If !Actor.isProstitute() && !Actor.isMale() && Player.isMale() && !Actor.hadSex() && !Actor.isRelative() && Actor.isInterestedIn(Player) && Actor:perversion > 70 && Actor:attractiontoplayer > 30 && !Actor.isDating()
+OTHER: none
+
+    SceneStart()
+    
+    setBackground(street)
+    
+    "I was hanging out with <Actor.name> when <Actor.he_or_she> insisted that I followed <Actor.him_or_her> to <Actor.his_or_her> a house party a friend of <Actor.his_or_her> is hosting tonight."
+    1:: "Go to the house party"
+    0:: "Refuse"
+    
+    If 0
+        Player(Sad):: "Sorry, I'm not in the mood for parting today ... You guys have fun!"
+        Actor:attractiontoplayer -= Random(0, 0.5)
+        endDate()
+        
+    Else
+        Player(Happy):: "Okay, let's go to your friend's house party then."
+        setBackground(home)
+        
+        Guest1 = generatePersonTemporary()
+        While !Guest1.isMale()
+            Guest1 = generatePersonTemporary()
+        endWhile
+        Guest1.randomizeHairs()
+        Guest1.randomizeFace()
+        Guest1.dress()
+        Guest1.show(1)
+
+        Guest2 = generatePersonTemporary()
+        While !Guest2.isMale()
+            Guest2 = generatePersonTemporary()
+        endWhile
+        Guest2.randomizeHairs()
+        Guest2.randomizeFace()
+        Guest2.dress()
+        Guest2.show(2)
+        
+        Guest3 = generatePersonTemporary()
+        While !Guest3.isMale()
+            Guest3 = generatePersonTemporary()
+        endWhile
+        Guest3.randomizeHairs()
+        Guest3.randomizeFace()
+        Guest3.dress()
+        Guest3.show(3)
+        
+        Actor(Happy):: "<Player.name>, meet my friends <Guest3.name>, <Guest2.name> and <Guest1.name>!"
+        Player(Happy):: "Nice to meet you all!"
+        "An hour later ..."
+        "This house party isn't so bad ..."
+        
+        intoxication += Random(0, 100)
+        Guest3(Wink):: "Guys, let's play some strip poker!"
+        0:: perversion > 15:: "Join them"
+        1:: "Go home"
+        
+        If 0
+            Player(Embarassed):: "Okay then ... Let's play."
+            Actor(Flirty):: "Remember our usual rules: If anyone loses a round but has no clothes left, they have to touch themselves a bit for everyone else's enjoyment."
+            Guest1(Happy):: "Deal!"
+            Guest2(Happy):: "Sounds good to me."
+            Guest3(Happy):: "Yeah!"
+            Player(Happy):: "I'm all in ..."
+            round = 0
+            perversion += Random(0, 0.5)
+            masochist += Random(0, 0.25)
+            CompanionLost = 0
+            While choice == 0 && round < 20
+                "What should I do?"
+                0:: "Play another round"
+                1:: "Stop playing"
+            
+                If 0
+                    round += 1
+                    Random
+                        Loser = Player
+                        Loser = Actor
+                        Loser = Actor
+                        Loser = Actor
+                        Loser = Guest1
+                        Loser = Guest2
+                        Loser = Guest3
+                    endRandom
+                    Loser(Sad):: "Damn, I lost!"
+                    If Loser.isNaked()
+                        If Loser.isSameAs(Actor)
+                            CompanionLost += 1
+                            If CompanionLost > 1
+                                SoloAction = false
+                                Guest3(Happy):: "<Actor.name> lost again! Remember the last rule?"
+                                Guest3(Happy):: "So, who will be the lucky one?"
+                                
+                                If Actor:masochist < masochist && Actor:masochist < -75 && masochist > 75 && Actor:perversion > 75 && isModEnabled(vin_NTR)
+                                    Guest3(Happy):: "How about this: Let's all have fun together!"
+                                    Actor(Flirty):: "Yeah, I'm feeling very naughty today, but ... not <Player.name>!"
+                                    Guest3(Flirty):: "Hahaha! I guess he can jerk off instead!"
+                                    Player(Sad):: "..."
+                                    
+                                    Player.hide()
+                                    Actor.hide()
+                                    Guest1.hide()
+                                    Guest2.hide()
+                                    Guest3.hide()
+                                    Sex(Guest1, Guest2, Guest3, Actor)
+                                    Player.show(0)
+                                    Actor.show(4)
+                                    Guest1.show(1)
+                                    Guest2.show(2)
+                                    Guest3.show(3)
+                                    choice = 4
+                                    
+                                ElseIf masochist < 75 && Actor:perversion > 75 && Random(0,100) > 50 // patcher replaced {If} with {ElseIf}
+                                    Actor(Flirty):: "I'm feeling very naughty today, let's all have fun together!"
+                                    
+                                    Player.hide()
+                                    Actor.hide()
+                                    Guest1.hide()
+                                    Guest2.hide()
+                                    Guest3.hide()
+                                    Sex(Player, Guest1, Guest2, Guest3, Actor)
+                                    Player.show(0)
+                                    Actor.show(4)
+                                    Guest1.show(1)
+                                    Guest2.show(2)
+                                    Guest3.show(3)
+                                    choice = 4
+                                    
+                                Elseif Actor:masochist < masochist && Actor:masochist < -75 && isModEnabled(vin_NTR)
+                                    Random
+                                        choice = 1
+                                        choice = 2
+                                        choice = 3
+                                    endRandom
+                                    
+                                Else
+                                    Random
+                                        choice = 0
+                                        choice = 1
+                                        choice = 2
+                                        choice = 3
+                                    endRandom
+                                Endif
+                                
+                                If 0
+                                    Winner = Player
+                                    Actor(Flirty):: "<Player.name>"
+                                    SoloAction = true
+                                Elseif 1
+                                    Winner = Guest1
+                                    Actor(Flirty):: "<Guest1.name>"
+                                    SoloAction = true
+                                Elseif 2
+                                    Winner = Guest2
+                                    Actor(Flirty):: "<Guest2.name>"
+                                    SoloAction = true
+                                Elseif 3
+                                    Winner = Guest3
+                                    Actor(Flirty):: "<Guest3.name>"
+                                    SoloAction = true
+                                Endif
+                                
+                                If SoloAction
+                                    Player.hide()
+                                    Actor.hide()
+                                    Guest1.hide()
+                                    Guest2.hide()
+                                    Guest3.hide()
+                                    Sex(Winner, Actor)
+                                    Player.show(0)
+                                    Actor.show(4)
+                                    Guest1.show(1)
+                                    Guest2.show(2)
+                                    Guest3.show(3)
+                                Endif
+                                
+                            Else
+                                Actor():: "Damn, no clothes left, I guess I have to ..."
+                                Player.hide()
+                                Actor.hide()
+                                Guest1.hide()
+                                Guest2.hide()
+                                Guest3.hide()
+                                Filter(Solo)
+                                Sex(Actor)
+                                Player.show(0)
+                                Actor.show(4)
+                                Guest1.show(1)
+                                Guest2.show(2)
+                                Guest3.show(3)
+                                Guest3(Happy):: "Nice show <Actor.name>! How about we make the game more entertaining? If you lose one more time you have to please one of us!" 
+                            Endif
+                        Else
+                            Loser():: "No clothes left ... Some solo action it is then ..."
+                            Player.hide()
+                            Actor.hide()
+                            Guest1.hide()
+                            Guest2.hide()
+                            Guest3.hide()
+                            Filter(Solo)
+                            Sex(Loser)
+                            Player.show(0)
+                            Actor.show(4)
+                            Guest1.show(1)
+                            Guest2.show(2)
+                            Guest3.show(3)
+                        Endif
+                        Loser:perversion += Random(0, 0.25)
+                    Else
+                        Loser(Embarassed):: "Off this goes then ..."
+                        Loser.stripOne()
+                        Loser:perversion += Random(0, 0.1)
+                    Endif
+                Endif
+            Endwhile
+            If Actor:masochist < masochist && Actor:masochist < -75 && masochist > 75 && Actor:perversion > 50 && isModEnabled(vin_NTR)
+                Player(Sad):: "I think I'd better get going now. Thank you for inviting me to this house party."
+                Actor(Happy):: "I'll stay. It's so much fun right now!"
+                Player(Sad):: "..."
+                endDate()
+                
+            Else
+                Guest3(Happy):: "I think that's enough strip poker for tonight ... Thank you all for participating!"
+                "Eventually the party winded down and everyone went home."
+                Actor.dress()
+                
+            Endif
+            
+        Else
+            Player(Sad):: "I'd rather not ... I think I'd better get going now. Thank you for inviting me to this house party."
+            "Who does <Actor.he_or_she> take me for? Getting naked in front of a bunch of people I've just met over some poker - no way!"
+            endDate()
+            
+        Endif
+    Endif
+    
+    SceneEnd()
+    
+    timeout(500, co_vi_strippoker_femalecompanion)

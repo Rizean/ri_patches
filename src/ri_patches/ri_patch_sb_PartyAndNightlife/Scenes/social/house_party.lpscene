@@ -1,0 +1,3103 @@
+WHAT: none
+WHERE: none
+WHEN: 0-24
+WHO: Host = getSpecific(PassedOn)
+OTHER: none
+
+    PassedOnPartyType = SB_PartyType.getGlobal()
+    SB_PartyType.clearGlobal()
+    PlayerHosting = false
+    InvitedStrangers = false
+    WeirdJerkOff = false
+    Breakup = false
+    DebugLog = false
+    
+    If isWithCompanion() && PassedOnPartyType != 7
+        endDate()
+    Endif
+    
+    If PassedOnPartyType == 0
+        Accepted = false
+        PlayerHosting = true
+    Else
+        Accepted = false
+        PlayerHosting = false
+    Endif
+    
+    SceneStart()
+    
+    If PassedOnPartyType == 1 // Cocktail Party
+        Player.hide()
+        PartyType = 1
+    Elseif PassedOnPartyType == 2 // Wedding
+        Player.hide()
+        PartyType = 2
+    Elseif PassedOnPartyType == 4 // Office Party
+        Player.hide()
+        PartyType = 4
+    Elseif PassedOnPartyType == 5 // Pyjama Party
+        Player.hide()
+        PartyType = 5
+    Elseif PassedOnPartyType == 6 // Neighbors
+        Player.hide()
+        PartyType = 6
+    Elseif PassedOnPartyType == 7 // Pornstar Party
+        Player.hide()
+        PartyType = 7
+    Else
+        PartyType = 3 // Normal House Party
+    Endif
+    
+    If PlayerHosting
+        "Should I hand-pick guests for the party? Or should I just make a public event on Facebook that allows my friends to bring their friends along?"
+        0:: "Hand-pick guests"
+        1:: "Post an invitation to all your friends on facebook"
+        2:: "I'd rather meet new people"
+        
+        If 0
+            "Who should be my first guest?"
+            selectNPC()
+            Guest1 = getSelectedNPC()
+            If !Guest1.isValid()
+                "I can't quite decide on who to invite."
+            Elseif Guest1.isCreature()
+                "I can't invite animals."
+            Elseif Guest1:rapportwithplayer > 0 || Guest1:attractiontoplayer > 0
+                Guest1.hide()
+                "<Guest1.name> happily accepted my invitation."
+            Else
+                Guest1.hide()
+                "<Guest1.name> turned down my invitation. Oh well ..."
+                Guest1.delete()
+            Endif
+            
+            "Who else should I invite?"
+            selectNPC()
+            Guest2 = getSelectedNPC()
+            If !Guest2.isValid()
+                "I can't quite decide on who to invite."
+            Elseif Guest2.isCreature()
+                "I can't invite animals."
+            Elseif Guest2:rapportwithplayer > 0 || Guest2:attractiontoplayer > 0
+                Guest2.hide()
+                "<Guest2.name> happily accepted my invitation."
+            Else
+                Guest2.hide()
+                "<Guest2.name> turned down my invitation. Oh well ..."
+                Guest2.delete()
+            Endif
+            
+            "Who else should I invite?"
+            selectNPC()
+            Guest3 = getSelectedNPC()
+            If !Guest3.isValid()
+                "I can't quite decide on who to invite."
+            Elseif Guest3.isCreature()
+                "I can't invite animals."
+            Elseif Guest3:rapportwithplayer > 0 || Guest3:attractiontoplayer > 0
+                Guest3.hide()
+                "<Guest3.name> happily accepted my invitation."
+            Else
+                Guest3.hide()
+                "<Guest3.name> turned down my invitation. Oh well ..."
+                Guest3.delete()
+            Endif
+            
+            "Who else should I invite?"
+            selectNPC()
+            Guest4 = getSelectedNPC()
+            If !Guest4.isValid()
+                "I can't quite decide on who to invite."
+            Elseif Guest4.isCreature()
+                "I can't invite animals."
+            Elseif Guest4:rapportwithplayer > 0 || Guest4:attractiontoplayer > 0
+                Guest4.hide()
+                "<Guest4.name> happily accepted my invitation."
+            Else
+                Guest4.hide()
+                "<Guest4.name> turned down my invitation. Oh well ..."
+                Guest4.delete()
+            Endif
+            
+            "Who else should I invite?"
+            selectNPC()
+            Guest5 = getSelectedNPC()
+            If !Guest5.isValid()
+                "I can't quite decide on who to invite."
+            Elseif Guest5.isCreature()
+                "I can't invite animals."
+            Elseif Guest5:rapportwithplayer > 0 || Guest5:attractiontoplayer > 0
+                Guest5.hide()
+                "<Guest5.name> happily accepted my invitation."
+            Else
+                Guest5.hide()
+                "<Guest5.name> turned down my invitation. Oh well ..."
+                Guest5.delete()
+            Endif
+        Elseif 2
+            InvitedStrangers = true
+        Endif
+        "My preparations are all done. It's time to welcome the guests!"
+        Player(Happy):: "Come in, everyone! Don't be shy. Everything's ready."
+    
+    Elseif PartyType == 1 // Cocktail Party
+        Accepted = true
+        SnoopString = "Snoop around the house"
+        Player.hide()
+        Host.dress()
+        Host.show(0)
+        setBackground(home)
+        Host(Excited):: "Hello everyone! Don't be shy. Everything's ready."
+        
+    Elseif PartyType == 2 // Wedding
+        Accepted = true
+        SnoopString = "Snoop around the house"
+        Player.hide()
+        Host.dressWedding()
+        Host.show(0)
+        Guest5 = Host.getRelatedPerson(Dating, Spouses)
+        Guest4 = Host.getRelatedPerson(Siblings, ParentChild, Cousins)
+        Guest3 = Host.getRelatedPerson(Siblings, ParentChild, Cousins)
+        Guest2 = Guest5.getRelatedPerson(Siblings, ParentChild, Cousins)
+        Guest1 = Guest5.getRelatedPerson(Siblings, ParentChild, Cousins)
+        setBackground(Home)
+        Host(Excited):: "Hey, come in, everyone! Don't be shy. Everything's ready."
+        
+    Elseif PartyType == 4 // Business Farewell Party
+        Accepted = true
+        SnoopString = "Snoop around the office"
+        Player.hide()
+        dressFormal()
+        Host.removeColleague()
+        Host.dress()
+        Host.show(0)
+        setBackground(office)
+        Host(Excited):: "Don't be shy. Everything's ready."
+        
+    Elseif PartyType == 6 // Neighbors
+        Accepted = true
+        SnoopString = "Snoop around the house"
+        Player.hide()
+        Host.dress()
+        Host.show(0)
+        setBackground(Home)
+        Host(Excited):: "Come in, everyone! Don't be shy. Everything's ready."
+        
+    Elseif PartyType == 7 // Pornstar Party
+        Accepted = true
+        SnoopString = "Snoop around the house"
+        Player.hide()
+        CurrentCompanion.hide()
+        Host.strip()
+        Host.show(0)
+        Guest4 = CurrentCompanion
+        setBackground3D(Modules/sb_PartyAndNightlife/Bedrooms/sb_PNL_livingroom02.lpworld)
+        Host(Excited):: "Come in, everyone! Don't be shy. Everything's horny."
+        
+    Else
+        SnoopString = "Snoop around the house"
+        "My phone rang! It's <Host.name>. I wonder what <Host.he_or_she> is calling me for?"
+        Host.dress()
+        Host.show(2)
+        Host(Excited):: "Hey, <Player.name>. We're having a house party tonight. Do you want to come?"
+        0:: "Yes"
+        1:: "No"
+        
+        If 0
+            Accepted = true
+            Player(Excited):: "Of course. Count me in! I can't wait for the party to start ..."
+            Host(Happy):: "Glad to hear. See you soon then!"
+            "A while later ..."
+            setBackground(Home)
+            Player.dress()
+            Host(Happy):: "Come in, everyone! Don't be shy. Everything's ready."
+            Host.hide()
+        Else
+            Accepted = false
+            Player(Sad):: "I'm busy tonight I'm afraid. You guys have fun though ..."
+            Host(Sad):: "Oh, that's a shame. Maybe next time then."
+        Endif
+    
+    Endif
+
+    If InvitedStrangers
+        "I posted a party invitation online for everyone ..."
+    Endif
+
+    If PlayerHosting || Accepted
+        If !PlayerHosting
+            If !Guest5.isValid() && Host.hasRelationship(Dating, Spouses) 
+                Guest5 = Host.getRelatedPerson(Dating, Spouses)
+            Endif
+        Endif
+        If !Guest1.isValid() || Guest1.isCreature() 
+            If InvitedStrangers
+                Guest1 = generatePerson()
+            Elseif PartyType == 4
+                Guest1 = getSpecific(Colleague)
+                If !Guest1.isValid()
+                    Guest1 = generatePerson()
+                    Guest1.addColleague()
+                Endif
+            Elseif PartyType == 6
+                Guest1 = getSpecific(Neighbour)
+                If !Guest1.isValid()
+                    Guest1 = generatePerson()
+                    Guest1.addNeighbour()
+                Endif
+            Elseif PartyType == 7
+                Guest1 = generatePerson()
+                If Guest1.isMale()
+                    Random
+                        Guest1.blendPreset(sb_PYG_pornstar_M_african_daz)
+                        Guest1.blendPreset(sb_PYG_pornstar_M_african_daz)
+                        Guest1.blendPreset(sb_PYG_pornstar_M_daz)
+                        Guest1.blendPreset(sb_PYG_pornstar_M_daz)
+                        Guest1.blendPreset(sb_PYG_monstercock_M_daz)
+                        Guest1.blendPreset(sb_PYG_underweight_daz)
+                    endRandom
+                Else
+                    Random
+                        Guest1.blendPreset(sb_PYG_monstertits_F_daz)
+                        Guest1.blendPreset(sb_PYG_pornstar_F_african_daz)
+                        Guest1.blendPreset(sb_PYG_monstersilicone_F_daz)
+                        Guest1.blendPreset(sb_PYG_pornstar_F_daz)
+                        Guest1.blendPreset(sb_PYG_shapely_F_daz)
+                        Guest1.blendPreset(sb_PYG_underweight_F_daz)
+                    endRandom
+                Endif
+                Guest1.blendPreset(sb_PYG_pornstarstats)
+                Guest1.setJob(Pornstar)
+                Guest1.setActorVar(tag_Pornstar, 1)
+                Guest1.setActorVar(PYG_isPornstar, 100)
+                
+                If isModEnabled(sb_BeautyExpansion)
+                    If Random(0,100) > 25
+                        Random
+                            Guest1.blendPreset(sb_BP_hair_pink)
+                            Guest1.blendPreset(sb_BP_hair_teal)
+                            Guest1.blendPreset(sb_BP_hair_green)
+                            Guest1.blendPreset(sb_BP_hair_red)
+                            Guest1.blendPreset(sb_BP_hair_blue)
+                        endRandom
+                    Elseif Random(0,100) > 50
+                        Random
+                            Guest1.blendPreset(sb_BP_hair_blonde)
+                        endRandom
+                    Endif
+                    If Random(0,100) > 75
+                        Guest1.blendPreset(sb_BP_boobjobA_F)
+                    Endif
+                    Random
+                        Guest1.blendPreset(sb_BP_elegant_lips_F)
+                        Guest1.blendPreset(sb_BP_elegant_lips_F)
+                        Guest1.blendPreset(sb_BP_elegant_lips_F)
+                        Guest1.blendPreset(sb_BP_strongmakeup_F)
+                        Guest1.blendPreset(sb_BP_strongmakeup_F)
+                        Guest1.blendPreset(sb_BP_strongmakeup_F)
+                    endRandom
+                    Guest1.blendPreset(sb_BP_nobodyhair_F)
+                    Guest1.blendPreset(sb_BP_longnails_F)
+                    Guest1.blendPreset(sb_BP_eyelashes_F)
+                Endif
+                
+                Guest1.randomizeFace()
+            Else
+                Guest1 = getPerson(true)
+            Endif
+            If !Guest1.isValid()
+                Guest1 = generatePerson()
+            Endif
+        Endif
+        If PartyType == 1 || PartyType == 2 || PartyType == 4
+            dressFormal()
+            Guest1.dress()
+        Elseif PartyType == 5
+            Guest1.strip()
+            Guest1.dressExcept(Outerwear, Top, Bottom, Foot, Headwear)
+            Host.strip()
+            Host.dressExcept(Outerwear, Top, Bottom, Foot, Headwear)
+            Player.strip()
+            Player.dressExcept(Outerwear, Top, Bottom, Foot, Headwear)
+        Elseif PartyType == 7
+            Guest1.strip()
+            Random
+                Guest1.strip()
+                Guest1.dressExcept(Outerwear, Top, Bottom, Foot, Headwear)
+            endRandom
+            Player.strip()
+            Player.dressExcept(Outerwear, Top, Bottom, Foot, Headwear)
+        Else
+            Guest1.dress()
+        Endif
+        Guest1.show(1)
+        "<Guest1.name> showed up."
+        
+        If !Guest2.isValid() || Guest2.isCreature()
+            If InvitedStrangers
+                Guest2 = generatePerson()
+            Elseif PartyType == 4
+                Guest2 = getSpecific(Colleague)
+                If !Guest2.isValid()
+                    Guest2 = generatePerson()
+                    Guest2.addColleague()
+                Endif
+            Elseif PartyType == 6
+                Guest2 = getSpecific(Neighbour)
+                If !Guest2.isValid()
+                    Guest2 = generatePerson()
+                    Guest2.addNeighbour()
+                Endif
+            Elseif PartyType == 7
+                Guest2 = generatePerson()
+                If Guest2.isMale()
+                    Random
+                        Guest2.blendPreset(sb_PYG_pornstar_M_african_daz)
+                        Guest2.blendPreset(sb_PYG_pornstar_M_african_daz)
+                        Guest2.blendPreset(sb_PYG_pornstar_M_daz)
+                        Guest2.blendPreset(sb_PYG_pornstar_M_daz)
+                        Guest2.blendPreset(sb_PYG_monstercock_M_daz)
+                        Guest2.blendPreset(sb_PYG_underweight_daz)
+                    endRandom
+                Else
+                    Random
+                        Guest2.blendPreset(sb_PYG_monstertits_F_daz)
+                        Guest2.blendPreset(sb_PYG_pornstar_F_african_daz)
+                        Guest2.blendPreset(sb_PYG_monstersilicone_F_daz)
+                        Guest2.blendPreset(sb_PYG_pornstar_F_daz)
+                        Guest2.blendPreset(sb_PYG_shapely_F_daz)
+                        Guest2.blendPreset(sb_PYG_underweight_F_daz)
+                    endRandom
+                Endif
+                Guest2.blendPreset(sb_PYG_pornstarstats)
+                Guest2.setJob(Pornstar)
+                Guest2.setActorVar(tag_Pornstar, 1)
+                Guest2.setActorVar(PYG_isPornstar, 100)
+                
+                If isModEnabled(sb_BeautyExpansion)
+                    If Random(0,100) > 25
+                        Random
+                            Guest2.blendPreset(sb_BP_hair_pink)
+                            Guest2.blendPreset(sb_BP_hair_teal)
+                            Guest2.blendPreset(sb_BP_hair_green)
+                            Guest2.blendPreset(sb_BP_hair_red)
+                            Guest2.blendPreset(sb_BP_hair_blue)
+                        endRandom
+                    Elseif Random(0,100) > 50
+                        Random
+                            Guest2.blendPreset(sb_BP_hair_blonde)
+                        endRandom
+                    Endif
+                    If Random(0,100) > 75
+                        Guest2.blendPreset(sb_BP_boobjobA_F)
+                    Endif
+                    Random
+                        Guest2.blendPreset(sb_BP_elegant_lips_F)
+                        Guest2.blendPreset(sb_BP_elegant_lips_F)
+                        Guest2.blendPreset(sb_BP_elegant_lips_F)
+                        Guest2.blendPreset(sb_BP_strongmakeup_F)
+                        Guest2.blendPreset(sb_BP_strongmakeup_F)
+                        Guest2.blendPreset(sb_BP_strongmakeup_F)
+                    endRandom
+                    Guest2.blendPreset(sb_BP_nobodyhair_F)
+                    Guest2.blendPreset(sb_BP_longnails_F)
+                    Guest2.blendPreset(sb_BP_eyelashes_F)
+                Endif
+                
+                Guest2.randomizeFace()
+            Else
+                Guest2 = getPerson(true)
+            Endif
+            If !Guest2.isValid()
+                Guest2 = generatePerson()
+            Endif
+        Endif
+        If PartyType == 1 || PartyType == 2 || PartyType == 4
+            dressFormal()
+            Guest2.dress()
+        Elseif PartyType == 5
+            Guest2.strip()
+            Guest2.dressExcept(Outerwear, Top, Bottom, Foot, Headwear)
+        Elseif PartyType == 7
+            Guest2.strip()
+            Random
+                Guest2.strip()
+                Guest2.dressExcept(Outerwear, Top, Bottom, Foot, Headwear)
+            endRandom
+        Else
+            Guest2.dress()
+        Endif
+        Guest2.show(2)
+        "<Guest2.name> came in."
+        
+        If !Guest3.isValid() || Guest3.isCreature()
+            If InvitedStrangers
+                Guest3 = generatePerson()
+            Elseif PartyType == 4
+                Guest3 = getSpecific(Colleague)
+                If !Guest3.isValid()
+                    Guest3 = generatePerson()
+                    Guest3.addColleague()
+                Endif
+            Elseif PartyType == 6
+                Guest3 = getSpecific(Neighbour)
+                If !Guest3.isValid()
+                    Guest3 = generatePerson()
+                    Guest3.addNeighbour()
+                Endif
+            Elseif PartyType == 7
+                Guest3 = generatePerson()
+                If Guest3.isMale()
+                    Random
+                        Guest3.blendPreset(sb_PYG_pornstar_M_african_daz)
+                        Guest3.blendPreset(sb_PYG_pornstar_M_african_daz)
+                        Guest3.blendPreset(sb_PYG_pornstar_M_daz)
+                        Guest3.blendPreset(sb_PYG_pornstar_M_daz)
+                        Guest3.blendPreset(sb_PYG_monstercock_M_daz)
+                        Guest3.blendPreset(sb_PYG_underweight_daz)
+                    endRandom
+                Else
+                    Random
+                        Guest3.blendPreset(sb_PYG_monstertits_F_daz)
+                        Guest3.blendPreset(sb_PYG_pornstar_F_african_daz)
+                        Guest3.blendPreset(sb_PYG_monstersilicone_F_daz)
+                        Guest3.blendPreset(sb_PYG_pornstar_F_daz)
+                        Guest3.blendPreset(sb_PYG_shapely_F_daz)
+                        Guest3.blendPreset(sb_PYG_underweight_F_daz)
+                    endRandom
+                Endif
+                Guest3.blendPreset(sb_PYG_pornstarstats)
+                Guest3.setJob(Pornstar)
+                Guest3.setActorVar(tag_Pornstar, 1)
+                Guest3.setActorVar(PYG_isPornstar, 100)
+                
+                If isModEnabled(sb_BeautyExpansion)
+                    If Random(0,100) > 25
+                        Random
+                            Guest3.blendPreset(sb_BP_hair_pink)
+                            Guest3.blendPreset(sb_BP_hair_teal)
+                            Guest3.blendPreset(sb_BP_hair_green)
+                            Guest3.blendPreset(sb_BP_hair_red)
+                            Guest3.blendPreset(sb_BP_hair_blue)
+                        endRandom
+                    Elseif Random(0,100) > 50
+                        Random
+                            Guest3.blendPreset(sb_BP_hair_blonde)
+                        endRandom
+                    Endif
+                    If Random(0,100) > 75
+                        Guest3.blendPreset(sb_BP_boobjobA_F)
+                    Endif
+                    Random
+                        Guest3.blendPreset(sb_BP_elegant_lips_F)
+                        Guest3.blendPreset(sb_BP_elegant_lips_F)
+                        Guest3.blendPreset(sb_BP_elegant_lips_F)
+                        Guest3.blendPreset(sb_BP_strongmakeup_F)
+                        Guest3.blendPreset(sb_BP_strongmakeup_F)
+                        Guest3.blendPreset(sb_BP_strongmakeup_F)
+                    endRandom
+                    Guest3.blendPreset(sb_BP_nobodyhair_F)
+                    Guest3.blendPreset(sb_BP_longnails_F)
+                    Guest3.blendPreset(sb_BP_eyelashes_F)
+                Endif
+                    
+                Guest3.randomizeFace()
+            Else
+                Guest3 = getPerson(true)
+            Endif
+            If !Guest3.isValid()
+                Guest3 = generatePerson()
+            Endif
+        Endif
+        If PartyType == 1 || PartyType == 2 || PartyType == 4
+            dressFormal()
+            Guest3.dress()
+        Elseif PartyType == 5
+            Guest3.strip()
+            Guest3.dressExcept(Outerwear, Top, Bottom, Foot, Headwear)
+        Elseif PartyType == 7
+            Guest3.strip()
+            Random
+                Guest3.strip()
+                Guest3.dressExcept(Outerwear, Top, Bottom, Foot, Headwear)
+            endRandom
+        Else
+            Guest3.dress()
+        Endif
+        Guest3.show(3)
+        "<Guest3.name> arrived."
+        
+        If !Guest4.isValid() || Guest4.isCreature()
+            If InvitedStrangers
+                Guest4 = generatePerson()
+            Elseif PartyType == 4
+                Guest4 = getSpecific(Colleague)
+                If !Guest4.isValid()
+                    Guest4 = generatePerson()
+                    Guest4.addColleague()
+                Endif
+            Elseif PartyType == 6
+                Guest4 = getSpecific(Neighbour)
+                If !Guest4.isValid()
+                    Guest4 = generatePerson()
+                    Guest4.addNeighbour()
+                Endif
+            Elseif PartyType == 7
+                If !Guest4.isValid()
+                    Guest4 = generatePerson()
+                    If Guest4.isMale()
+                        Random
+                            Guest4.blendPreset(sb_PYG_pornstar_M_african_daz)
+                            Guest4.blendPreset(sb_PYG_pornstar_M_african_daz)
+                            Guest4.blendPreset(sb_PYG_pornstar_M_daz)
+                            Guest4.blendPreset(sb_PYG_pornstar_M_daz)
+                            Guest4.blendPreset(sb_PYG_monstercock_M_daz)
+                            Guest4.blendPreset(sb_PYG_underweight_daz)
+                        endRandom
+                    Else
+                        Random
+                            Guest4.blendPreset(sb_PYG_monstertits_F_daz)
+                            Guest4.blendPreset(sb_PYG_pornstar_F_african_daz)
+                            Guest4.blendPreset(sb_PYG_monstersilicone_F_daz)
+                            Guest4.blendPreset(sb_PYG_pornstar_F_daz)
+                            Guest4.blendPreset(sb_PYG_shapely_F_daz)
+                            Guest4.blendPreset(sb_PYG_underweight_F_daz)
+                        endRandom
+                    Endif
+                    Guest4.blendPreset(sb_PYG_pornstarstats)
+                    Guest4.setJob(Pornstar)
+                    Guest4.setActorVar(tag_Pornstar, 1)
+                    Guest4.setActorVar(PYG_isPornstar, 100)
+                    
+                    If isModEnabled(sb_BeautyExpansion)
+                        If Random(0,100) > 25
+                            Random
+                                Guest4.blendPreset(sb_BP_hair_pink)
+                                Guest4.blendPreset(sb_BP_hair_teal)
+                                Guest4.blendPreset(sb_BP_hair_green)
+                                Guest4.blendPreset(sb_BP_hair_red)
+                                Guest4.blendPreset(sb_BP_hair_blue)
+                            endRandom
+                        Elseif Random(0,100) > 50
+                            Random
+                                Guest4.blendPreset(sb_BP_hair_blonde)
+                            endRandom
+                        Endif
+                        If Random(0,100) > 75
+                            Guest4.blendPreset(sb_BP_boobjobA_F)
+                        Endif
+                        Random
+                            Guest4.blendPreset(sb_BP_elegant_lips_F)
+                            Guest4.blendPreset(sb_BP_elegant_lips_F)
+                            Guest4.blendPreset(sb_BP_elegant_lips_F)
+                            Guest4.blendPreset(sb_BP_strongmakeup_F)
+                            Guest4.blendPreset(sb_BP_strongmakeup_F)
+                            Guest4.blendPreset(sb_BP_strongmakeup_F)
+                        endRandom
+                        Guest4.blendPreset(sb_BP_nobodyhair_F)
+                        Guest4.blendPreset(sb_BP_longnails_F)
+                        Guest4.blendPreset(sb_BP_eyelashes_F)
+                    Endif
+                    
+                    Guest4.randomizeFace()
+                Endif
+            Else
+                Guest4 = getPerson(true)
+            Endif
+            If !Guest4.isValid()
+                Guest4 = generatePerson()
+            Endif
+        Endif
+        If PartyType == 1 || PartyType == 2 || PartyType == 4
+            dressFormal()
+            Guest4.dress()
+        Elseif PartyType == 5
+            Guest4.strip()
+            Guest4.dressExcept(Outerwear, Top, Bottom, Foot, Headwear)
+        Elseif PartyType == 7
+            Guest4.strip()
+            Random
+                Guest4.strip()
+                Guest4.dressExcept(Outerwear, Top, Bottom, Foot, Headwear)
+            endRandom
+        Else
+            Guest4.dress()
+        Endif
+        Guest4.show(4)
+        "Another guest was <Guest4.name>."
+        
+        If !Guest5.isValid() || Guest5.isCreature()
+            If InvitedStrangers
+                Guest5 = generatePerson()
+            Elseif PartyType == 4
+                Guest5 = getSpecific(Colleague)
+                If !Guest5.isValid()
+                    Guest5 = generatePerson()
+                    Guest5.addColleague()
+                Endif
+            Elseif PartyType == 6
+                Guest5 = getSpecific(Neighbour)
+                If !Guest5.isValid()
+                    Guest5 = generatePerson()
+                    Guest5.addNeighbour()
+                Endif
+            Elseif PartyType == 7
+                Guest5 = generatePerson()
+                If Guest5.isMale()
+                    Random
+                        Guest5.blendPreset(sb_PYG_pornstar_M_african_daz)
+                        Guest5.blendPreset(sb_PYG_pornstar_M_african_daz)
+                        Guest5.blendPreset(sb_PYG_pornstar_M_daz)
+                        Guest5.blendPreset(sb_PYG_pornstar_M_daz)
+                        Guest5.blendPreset(sb_PYG_monstercock_M_daz)
+                        Guest5.blendPreset(sb_PYG_underweight_daz)
+                    endRandom
+                Else
+                    Random
+                        Guest5.blendPreset(sb_PYG_monstertits_F_daz)
+                        Guest5.blendPreset(sb_PYG_pornstar_F_african_daz)
+                        Guest5.blendPreset(sb_PYG_monstersilicone_F_daz)
+                        Guest5.blendPreset(sb_PYG_pornstar_F_daz)
+                        Guest5.blendPreset(sb_PYG_shapely_F_daz)
+                        Guest5.blendPreset(sb_PYG_shapely_F_daz)
+                        Guest5.blendPreset(sb_PYG_underweight_F_daz)
+                    endRandom
+                Endif
+                Guest5.blendPreset(sb_PYG_pornstarstats)
+                Guest5.setJob(Pornstar)
+                Guest5.setActorVar(tag_Pornstar, 1)
+                Guest5.setActorVar(PYG_isPornstar, 100)
+                
+                If isModEnabled(sb_BeautyExpansion)
+                    If Random(0,100) > 25
+                        Random
+                            Guest5.blendPreset(sb_BP_hair_pink)
+                            Guest5.blendPreset(sb_BP_hair_teal)
+                            Guest5.blendPreset(sb_BP_hair_green)
+                            Guest5.blendPreset(sb_BP_hair_red)
+                            Guest5.blendPreset(sb_BP_hair_blue)
+                        endRandom
+                    Elseif Random(0,100) > 50
+                        Random
+                            Guest5.blendPreset(sb_BP_hair_blonde)
+                        endRandom
+                    Endif
+                    If Random(0,100) > 75
+                        Guest5.blendPreset(sb_BP_boobjobA_F)
+                    Endif
+                    Random
+                        Guest5.blendPreset(sb_BP_elegant_lips_F)
+                        Guest5.blendPreset(sb_BP_elegant_lips_F)
+                        Guest5.blendPreset(sb_BP_elegant_lips_F)
+                        Guest5.blendPreset(sb_BP_strongmakeup_F)
+                        Guest5.blendPreset(sb_BP_strongmakeup_F)
+                        Guest5.blendPreset(sb_BP_strongmakeup_F)
+                    endRandom
+                    Guest5.blendPreset(sb_BP_nobodyhair_F)
+                    Guest5.blendPreset(sb_BP_longnails_F)
+                    Guest5.blendPreset(sb_BP_eyelashes_F)
+                Endif
+                
+                Guest5.randomizeFace()
+            Else
+                Guest5 = getPerson(true)
+            Endif
+            If !Guest5.isValid()
+                Guest5 = generatePerson()
+            Endif
+        Endif
+        If PartyType == 1 || PartyType == 4
+            dressFormal()
+            Guest5.dress()
+        Elseif PartyType == 2
+            Guest5.dressWedding()
+            Guest5.show(5)
+            "And there was the <Guest5.groom_or_bride>!"
+        Elseif PartyType == 5
+            Guest5.strip()
+            Guest5.dressExcept(Outerwear, Top, Bottom, Foot, Headwear)
+            Guest5.show(5)
+            "<Guest5.name> was the final guest to arrive at the party."
+        Elseif PartyType == 7
+            Guest5.strip()
+            Random
+                Guest5.strip()
+                Guest5.dressExcept(Outerwear, Top, Bottom, Foot, Headwear)
+            endRandom
+        Else
+            Guest5.dress()
+            Guest5.show(5)
+            "<Guest5.name> was the final guest to arrive at the party."
+        Endif
+        
+        "Everyone is here now. Let's get the party started!"
+        
+        AlcoholLevel = 100
+        Guest1:intoxication -= 100
+        Guest2:intoxication -= 100
+        Guest3:intoxication -= 100
+        Guest4:intoxication -= 100
+        Guest5:intoxication -= 100
+        Host:intoxication -= 100
+        Player:intoxication -= 100
+        
+        GuestNumber = 0
+        If Guest1.isValid()
+            GuestNumber += 1
+        Endif
+        If Guest2.isValid()
+            GuestNumber += 1
+        Endif
+        If Guest3.isValid()
+            GuestNumber += 1
+        Endif
+        If Guest4.isValid()
+            GuestNumber += 1
+        Endif
+        If Guest5.isValid()
+            GuestNumber += 1
+        Endif
+        If !PlayerHosting
+            GuestNumber += 1
+        Endif
+        
+        SexEvent1 = false
+        SexEvent2 = false
+        SexEvent3 = false
+        SexEvent4 = false
+        SexEvent5 = false
+        SexEvent6 = false
+        SexEvent7 = false
+        SexEvent8 = false
+        SexEvent9 = false
+        SexEvent10 = false
+        SexEvent11 = false
+        GuestSex1 = false
+        GuestSex2 = false
+        GuestSex3 = false
+        GuestSex4 = false
+        GuestSex5 = false
+        GuestSex6 = false
+        
+        PartyOngoing = true
+        Spiked = false
+        Breakup = false
+        Aphrodisiac = false
+        RapeDrugs = false
+        VeryBadIdea = false
+        BadEnd = false
+        
+        // Strings
+        If PlayerHosting
+            LeaveString = "End the party"
+        Else
+            LeaveString = "Leave"
+        Endif
+        
+        While PartyOngoing
+            
+            If !PlayerHosting
+                Player.hide()
+                Host.show(0)
+            Else
+                Player.show(0)
+            Endif
+            Guest1.show(1)
+            Guest2.show(2)
+            Guest3.show(3)
+            Guest4.show(4)
+            Guest5.show(5)
+            
+            // Aphrodisiac
+            If Aphrodisiac && PartyOngoing == true
+                If !Guest1.isNaked() && Random(0,100) > 35 && [Guest1:intoxication > 90 || Guest1:perversion > Random(45,75)]
+                    Random
+                        "<Guest1.name> just decided to strip down infront of everyone!"
+                        "<Guest1.name> suddenly came naked from the bedroom."
+                        "<Guest1.name> took off <Guest1.his_or_her> clothes ..."
+                        "As expected, <Guest1.name> decided to get rid of <Guest1.his_or_her> clothes ..."
+                        "<Guest1.name> stripped down infront of <Guest1.name> ..."
+                        "<Guest1.name> stripped down on the dancefloor ..."
+                        "<Guest1.name> suddenly came naked from the restroom."
+                        "<Guest1.name> took off all of <Guest1.his_or_her> clothes ..."
+                        "As expected, <Guest1.name> decided to take off all of <Guest1.his_or_her> clothes ..."
+                        "<Guest1.name> stripped down infront of everyone ..."
+                        "<Guest1.name> stripped down in front of you ..."
+                    endRandom
+                    Guest1.strip()
+                    Random
+                        Guest1(Flirty):: "Phhuu ... it's ssooo hot in here ..."
+                        Guest1(Flirty):: "Wow ... I feel so weird ..."
+                        Guest1(Flirty):: "I'm feeling so horn... uhm ... hot, I mean hot! ... that's weird ..."
+                        Guest1(Flirty):: "... mmmh ..."
+                        Guest1(Flirty):: "... uuuh ... so hot ..."
+                        Guest1(Flirty):: "... that's amazing ... I never felt like this before!"
+                    endRandom
+                    Player(Happy):: "That's the spirit!"
+                Elseif !Guest2.isNaked() && Random(0,100) > 35 && [Guest2:intoxication > 90 || Guest2:perversion > Random(45,75)]
+                    Random
+                        "<Guest2.name> just decided to strip down infront of everyone!"
+                        "<Guest2.name> suddenly came naked from the bedroom."
+                        "<Guest2.name> took off <Guest2.his_or_her> clothes ..."
+                        "As expected, <Guest2.name> decided to get rid of <Guest2.his_or_her> clothes ..."
+                        "<Guest2.name> stripped down infront of <Guest2.name> ..."
+                        "<Guest2.name> stripped down on the dancefloor ..."
+                        "<Guest2.name> suddenly came naked from the restroom."
+                        "<Guest2.name> took off all of <Guest2.his_or_her> clothes ..."
+                        "As expected, <Guest2.name> decided to take off all of <Guest2.his_or_her> clothes ..."
+                        "<Guest2.name> stripped down infront of everyone ..."
+                        "<Guest2.name> stripped down in front of you ..."
+                    endRandom
+                    Guest2.strip()
+                    Random
+                        Guest2(Flirty):: "Phhuu ... it's ssooo hot in here ..."
+                        Guest2(Flirty):: "Wow ... I feel so weird ..."
+                        Guest2(Flirty):: "I'm feeling so horn... uhm ... hot, I mean hot! ... that's weird ..."
+                        Guest2(Flirty):: "... mmmh ..."
+                        Guest2(Flirty):: "... uuuh ... so hot ..."
+                        Guest2(Flirty):: "... that's amazing ... I never felt like this before!"
+                    endRandom
+                    Player(Happy):: "Okay ... whatever!"
+                Elseif !Guest3.isNaked() && Random(0,100) > 35 && [Guest3:intoxication > 90 || Guest3:perversion > Random(45,75)]
+                    Random
+                        "<Guest3.name> just decided to strip down infront of everyone!"
+                        "<Guest3.name> suddenly came naked from the bedroom."
+                        "<Guest3.name> took off <Guest3.his_or_her> clothes ..."
+                        "As expected, <Guest3.name> decided to get rid of <Guest3.his_or_her> clothes ..."
+                        "<Guest3.name> stripped down infront of <Guest3.name> ..."
+                        "<Guest3.name> stripped down on the dancefloor ..."
+                        "<Guest3.name> suddenly came naked from the restroom."
+                        "<Guest3.name> took off all of <Guest3.his_or_her> clothes ..."
+                        "As expected, <Guest3.name> decided to take off all of <Guest3.his_or_her> clothes ..."
+                        "<Guest3.name> stripped down infront of everyone ..."
+                        "<Guest3.name> stripped down in front of you ..."
+                    endRandom
+                    Guest3.strip()
+                    Random
+                        Guest3(Flirty):: "Phhuu ... it's ssooo hot in here ..."
+                        Guest3(Flirty):: "Wow ... I feel so weird ..."
+                        Guest3(Flirty):: "I'm feeling so horn... uhm ... hot, I mean hot! ... that's weird ..."
+                        Guest3(Flirty):: "... mmmh ..."
+                        Guest3(Flirty):: "... uuuh ... so hot ..."
+                        Guest3(Flirty):: "... that's amazing ... I never felt like this before!"
+                    endRandom
+                    Player(Happy):: "Hahahahahahaha!"
+                Elseif !Guest4.isNaked() && Random(0,100) > 35 && [Guest4:intoxication > 90 || Guest4:perversion > Random(45,75)]
+                    Random
+                        "<Guest4.name> just decided to strip down infront of everyone!"
+                        "<Guest4.name> suddenly came naked from the bedroom."
+                        "<Guest4.name> took off <Guest4.his_or_her> clothes ..."
+                        "As expected, <Guest4.name> decided to get rid of <Guest4.his_or_her> clothes ..."
+                        "<Guest4.name> stripped down infront of <Guest4.name> ..."
+                        "<Guest4.name> stripped down on the dancefloor ..."
+                        "<Guest4.name> suddenly came naked from the restroom."
+                        "<Guest4.name> took off all of <Guest4.his_or_her> clothes ..."
+                        "As expected, <Guest4.name> decided to take off all of <Guest4.his_or_her> clothes ..."
+                        "<Guest4.name> stripped down infront of everyone ..."
+                        "<Guest4.name> stripped down in front of you ..."
+                    endRandom
+                    Guest4.strip()
+                    Random
+                        Guest4(Flirty):: "Phhuu ... it's ssooo hot in here ..."
+                        Guest4(Flirty):: "Wow ... I feel so weird ..."
+                        Guest4(Flirty):: "I'm feeling so horn... uhm ... hot, I mean hot! ... that's weird ..."
+                        Guest4(Flirty):: "... mmmh ..."
+                        Guest4(Flirty):: "... uuuh ... so hot ..."
+                        Guest4(Flirty):: "... that's amazing ... I never felt like this before!"
+                    endRandom
+                    Player(Happy):: "Great! It's working!"
+                Elseif !Guest5.isNaked() && Random(0,100) > 35 && [Guest5:intoxication > 90 || Guest5:perversion > Random(45,75)]
+                    Random
+                        "<Guest5.name> just decided to strip down infront of everyone!"
+                        "<Guest5.name> suddenly came naked from the bedroom."
+                        "<Guest5.name> took off <Guest5.his_or_her> clothes ..."
+                        "As expected, <Guest5.name> decided to get rid of <Guest5.his_or_her> clothes ..."
+                        "<Guest5.name> stripped down infront of <Guest5.name> ..."
+                        "<Guest5.name> stripped down on the dancefloor ..."
+                        "<Guest5.name> suddenly came naked from the restroom."
+                        "<Guest5.name> took off all of <Guest5.his_or_her> clothes ..."
+                        "As expected, <Guest5.name> decided to take off all of <Guest5.his_or_her> clothes ..."
+                        "<Guest5.name> stripped down infront of everyone ..."
+                        "<Guest5.name> stripped down in front of you ..."
+                    endRandom
+                    Guest5.strip()
+                    Random
+                        Guest5(Flirty):: "Phhuu ... it's ssooo hot in here ..."
+                        Guest5(Flirty):: "Wow ... I feel so weird ..."
+                        Guest5(Flirty):: "I'm feeling so horn... uhm ... hot, I mean hot! ... that's weird ..."
+                        Guest5(Flirty):: "... mmmh ..."
+                        Guest5(Flirty):: "... uuuh ... so hot ..."
+                        Guest5(Flirty):: "... that's amazing ... I never felt like this before!"
+                    endRandom
+                    Player(Happy):: "YES!"
+                Elseif !Host.isNaked() && !PlayerHosting && Random(0,100) > 35 && [Host:intoxication > 90 || Host:perversion > Random(45,75)]
+                    Random
+                        "<Host.name> just decided to strip down infront of everyone!"
+                        "<Host.name> suddenly came naked from the bedroom."
+                        "<Host.name> took off <Host.his_or_her> clothes ..."
+                        "As expected, <Host.name> decided to get rid of <Host.his_or_her> clothes ..."
+                        "<Host.name> stripped down infront of <Host.name> ..."
+                        "<Host.name> stripped down on the dancefloor ..."
+                        "<Host.name> suddenly came naked from the restroom."
+                        "<Host.name> took off all of <Host.his_or_her> clothes ..."
+                        "As expected, <Host.name> decided to take off all of <Host.his_or_her> clothes ..."
+                        "<Host.name> stripped down infront of everyone ..."
+                        "<Host.name> stripped down in front of you ..."
+                    endRandom
+                    Host.strip()
+                    Random
+                        Host(Flirty):: "Phhuu ... it's ssooo hot in here ..."
+                        Host(Flirty):: "Wow ... I feel so weird ..."
+                        Host(Flirty):: "I'm feeling so horn... uhm ... hot, I mean hot! ... that's weird ..."
+                        Host(Flirty):: "... mmmh ..."
+                        Host(Flirty):: "... uuuh ... so hot ..."
+                        Host(Flirty):: "... that's amazing ... I never felt like this before!"
+                    endRandom
+                    Player(Happy):: "OOOOH YEAH!"
+                Else
+                    Player.strip()
+                Endif
+            Endif
+            If Aphrodisiac && AlcoholLevel > 200 && Random(0,100) < sneak && [DidDrink || DidDancing] 
+                If Guest4.isNaked() && Guest4.isInterestedIn(Guest3) && !SexEvent1
+                    Guest1.hide()
+                    Guest2.hide()
+                    Guest3.hide()
+                    Guest4.hide()
+                    Guest5.hide()
+                    Host.hide()
+                    Player.hide()
+                    Guest4.show(2)
+                    Guest3.show(3)
+                    Guest1.show(4)
+                    "As I came back to the living room I saw that <Guest4.name> was licking <Guest3.name>'s ass out while <Guest3.he_or_she> was talking to <Guest1.name>!!"
+                    SexEvent1 = true
+                Elseif Guest1.isNaked() && !SexEvent2
+                    Guest1.hide()
+                    Guest2.hide()
+                    Guest3.hide()
+                    Guest4.hide()
+                    Guest5.hide()
+                    Host.hide()
+                    Player.hide()
+                    Guest1.show(3)
+                    "As I came back to the living room I saw that <Guest1.name> was trying to seduce one of the bookshelves ... it seems <Guest1.he_or_she> is loosing it ..."
+                    Guest3(Flirty):: "You know ... you are so ... beautiful ... I don't know how to say it ..."
+                    Player():: "Hahahahaha ..."
+                    SexEvent2 = true
+                Elseif Guest3.isNaked() && !SexEvent3
+                    Guest1.hide()
+                    Guest2.hide()
+                    Guest3.hide()
+                    Guest4.hide()
+                    Guest5.hide()
+                    Host.hide()
+                    Player.hide()
+                    Guest1.show(3)
+                    "As I came back to the living room I saw that <Guest1.name> was rubbing <Guest1.his_or_her> <Guest1.cock_or_pussy> against the doorknob ... eeuuuh ..."
+                    Guest1(Pain):: "Oh god ... that's sooo gooood ..."
+                    "Then <Guest1.he_or_she> saw you ..."
+                    Guest1(Flirty):: "Ups ... sorry!"
+                    SexEvent3 = true
+                Elseif Guest2.isNaked() && Guest2.isFemale() && !SexEvent4 
+                    "As I came back to the living room I saw that <Guest2.name> was fingering her pussy like there's no tomorrow infront of everyone ..."
+                    Guest2.hide()
+                    Sex(Guest2)
+                    SexEvent4 = true
+                Elseif Guest4.isNaked() && Guest4.isMale() && !SexEvent5 
+                    Guest1.hide()
+                    Guest2.hide()
+                    Guest3.hide()
+                    Guest4.hide()
+                    Guest5.hide()
+                    Host.hide()
+                    Player.hide()
+                    Guest4.show(2)
+                    Guest5.show(3)
+                    "As I came back to the living room I saw that <Guest4.name> was jerking off into the drink of <Guest5.name>, he came in the same moment <Guest5.he_or_she> was about to grab it ..."
+                    If Guest5.isInterestedIn(Guest4) 
+                        Guest5(Flirty):: "Oh ... aehm ... why did you do this?"
+                        "<Guest5.name> takes <Guest5.his_or_her> finger and touches softly <Guest4.name>'s cock ... stroking over the tip and taking some of the cum ..."
+                        "Very surprisingly, <Guest5.name> looks at the cum on <Guest5.his_or_her> finger ... like <Guest5.he_or_she> has never seen something like this before ..."
+                        Player():: "Wtf? ..."
+                        "Then <Guest5.he_or_she> licks <Guest5.his_or_her> finger ... smiles at <Guest4.name>, grabs <Guest5.his_or_her> drink, sits down and enjoys <Guest5.his_or_her> drink."
+                        Player():: "Okay, that was unexpected ..."
+                    Else
+                        Guest5(Angry):: "Oh ... aehm ... why did you do this?"
+                        Guest5(Angry):: "Go get me another drink!"
+                        Player():: "Wtf? ..."
+                    Endif
+                    SexEvent5 = true
+                Elseif SexEvent5 && Guest5.isNaked() && Guest1.isMale() && !SexEvent6
+                    Guest1.hide()
+                    Guest2.hide()
+                    Guest3.hide()
+                    Guest4.hide()
+                    Guest5.hide()
+                    Host.hide()
+                    Player.hide()
+                    Guest4.show(3)
+                    Guest5.show(2)
+                    "As I came back to the living room I saw that <Guest5.name> was jerking off <Guest4.name> into <Guest5.his_or_her> drink ..."
+                    Guest5(Flirty):: "Come on ... give it to me!"
+                    "He came ..."
+                    Guest4(Pain):: "Aaaaahhhhhhhhh ... mmmmmmmmmhh"
+                    Guest5(Flirty):: "That's a nice big load ... thank you!"
+                    Guest5(Flirty):: "I don't know why it taste so good ... I never thought cum would be so tasty!"
+                    Player():: "Okay ..."
+                    SexEvent6 = true
+                Elseif SexEvent5 && SexEvent6 && !SexEvent7 && Guest3.isNaked() && Guest2.isNaked() && [Guest3.isMale() && Guest2.isMale()]
+                    Guest1.hide()
+                    Guest2.hide()
+                    Guest3.hide()
+                    Guest4.hide()
+                    Guest5.hide()
+                    Host.hide()
+                    Player.hide()
+                    Guest3.show(2)
+                    Guest5.show(3)
+                    Guest2.show(4)
+                    "As I came back to the living room I saw that <Guest5.name> was jerking off <Guest3.name> and <Guest2.name> at the same time ... everyone else was watching ..."
+                    Guest5(Flirty):: "Yes, yes ... give it to ME!"
+                    Guest5(Flirty):: "I want all your cum on my face!"
+                    Guest3(Pain):: "Aaaaahhhhhhhhh ... mmmmmmmmmhh"
+                    Guest2(Pain):: "Aoooohhh ... yeah ... mmmh"
+                    Guest5(Flirty):: "Ooooohh ... mmmmmhhh ... that's it!"
+                    "Both came with huge loads over <Guest5.his_or_her> face ..."
+                    Guest5(Flirty):: "Mmmmhhhh ..."
+                    "<Guest5.He_or_She> is collecting all the cum from <Guest5.his_or_her> face and swallowing it ..."
+                    Player():: "I didn't know <Guest5.name> could be so greedy ... hahahahaha!"
+                    SexEvent7 = true
+                Elseif SexEvent5 && SexEvent6 && SexEvent7 && !SexEvent8 && Guest4.isNaked() && Guest3.isNaked() && Guest2.isNaked() && Guest1.isNaked() && [Guest5.isFemale() || Guest5.isTrans()] && [Guest4.isMale() && Guest3.isMale() && Guest2.isMale() && Guest1.isMale()]
+                    Guest1.hide()
+                    Guest2.hide()
+                    Guest3.hide()
+                    Guest4.hide()
+                    Guest5.hide()
+                    Host.hide()
+                    Player.hide()
+                    Guest5(Flirty):: "Yes, yes ... YEEEEEEESSSS!"
+                    If PartyType == 2
+                        "As I came back to the living room I saw that <Guest5.name> was having a gangbang expect her newly-wed <Host.husband_or_wife> ..."
+                    Else
+                        "As I came back to the living room I saw that <Guest5.name> was having a gangbang ..."
+                    Endif
+                    SexNoAffair(Guest5, Guest4, Guest3, Guest2, Guest1)
+                    Player():: "I didn't know <Guest5.name> could be so greedy ... hahahahaha!"
+                    SexEvent8 = true
+                Elseif Guest2.isFemale() && Guest2.isNaked() && !SexEvent9
+                    Guest1.hide()
+                    Guest2.hide()
+                    Guest3.hide()
+                    Guest4.hide()
+                    Guest5.hide()
+                    Host.hide()
+                    Player.hide()
+                    Guest2.show(3)
+                    Guest2(Flirty):: "Gnnnnnnhhhh ..."
+                    "As I came back to the living room I saw that <Guest2.name> was peeing in the party punch ..."
+                    Player():: "What a spectacle! At least she didn't miss the bowl ..."
+                    SexEvent9 = true
+                Endif
+                If !PlayerHosting && Host.isValid() && Host.isNaked() && Host.isMale() && !SexEvent11
+                    Guest1.hide()
+                    Guest2.hide()
+                    Guest3.hide()
+                    Guest4.hide()
+                    Guest5.hide()
+                    Host.hide()
+                    Player.hide()
+                    Host.show(3)
+                    "As I came back to the living room I saw that <Host.name> was jerking off in the party punch ..."
+                    Host(Flirty):: "AAaaaaaaahhhh ... YESSSSS!"
+                    "In the same moment ..."
+                    Guest5.show(1)
+                    Guest5(Happy):: "Oh wow, that's a huge load! Hahahahaha!" // patcher replaced {Guest5(Happy) ::} with {Guest5(Happy)::}
+                    Player():: "What a spectacle! At least he didn't miss the bowl ..."
+                    SexEvent11 = true
+                Elseif !PlayerHosting && !SexEvent10 && PartyType == 2 && Host.isValid() && Host.isMale() && Guest5.isNaked() && Guest4.isNaked() && Guest3.isNaked() && Guest2.isNaked() && Guest1.isNaked() && !Guest5.isMale()
+                    KnockHerUp = false
+                    Guest1.hide()
+                    Guest2.hide()
+                    Guest3.hide()
+                    Guest4.hide()
+                    Guest5.hide()
+                    Host.hide()
+                    Player.hide()
+                    Host.show(2)
+                    Guest5.show(3)
+                    Host(Flirty):: "Okay, who wants to go next??"
+                    "As I came back to the living room I saw that <Host.name> was encouraging all the guests to have sex with his newly-wed <Guest5.husband_or_wife> ..."
+                    If Guest5.isFemale() && !Guest5.isPregnant() && [Guest4.isMale() || Guest3.isMale() || Guest2.isMale() || Guest1.isMale()]
+                        Host(Flirty):: "Let's knock her up! Look how she is presenting her ass, she's begging for it!"
+                        Guest5(Shocked):: "Honey!"
+                        If isModEnabled(sb_BetterPregnancy)
+                            Guest5.hide()
+                            "All of a sudden she storms out of the room ..."
+                            Player():: "(Whoa! Uh-oh!)"
+                            "Seconds later she comes back ..."
+                            Guest5.show(3)
+                            Guest5(Happy):: "That's a fantastic idea! I just took my fertility drugs!"
+                        Else
+                            Guest5(Happy):: "That's a fantastic idea!"
+                        Endif
+                        Host(Flirty):: "You're such a great wife!"
+                        Player():: "(Wtf??! Hahahahahaha!)"
+                        KnockHerUp = true
+                    Endif
+                    Player():: "(I really hope they will not remember anything tomorrow ...)"
+                    Host(Flirty):: "I want everyone to have fun at my wedding! Otherwise I would be a terrible host ..."
+                    If !Player.isFemale() && Guest5.isFemale()
+                        0:: "Volunteer to be the next"
+                        1:: "Wait what happens"
+                        
+                        If 0
+                            Filter(Vaginal)
+                            Sex(Guest5, Player)
+                            If KnockHerUp
+                                Guest5.impregnate()
+                                If isModEnabled(sb_BetterPregnancy) 
+                                    Guest5.setActorVar(BPisPregnant, 100)
+                                Endif
+                            Endif
+                            Player.hide()
+                            Host.show(2)
+                            Guest5.show(3)
+                            If KnockHerUp
+                                "You pumped her full of your cum. This and the fact that she just took some fertility drugs makes you confident that you just knocked her up."
+                                Guest5(Happy):: "Wow, look honey! It's dripping out!"
+                            Endif
+                            Host(Flirty):: "Who's next??"
+                        Endif
+                    Endif
+                    "All the guests were eager to take turns fucking her ..."
+                    SexNoAffair(Guest4, Guest5)
+                    SexNoAffair(Guest3, Guest5)
+                    SexNoAffair(Guest2, Guest5)
+                    SexNoAffair(Guest1, Guest5)
+                    Guest1.hide()
+                    Guest2.hide()
+                    Guest3.hide()
+                    Guest4.hide()
+                    Host.show(2)
+                    Guest5.show(3)
+                    Player():: "(Oh boy, that's what I call a wedding!)"
+                    Guest5(Happy):: "Woah, now I'm thirsty!"
+                    Host(Happy):: "Then let's have a drink!!"
+                    Guest5.hide()
+                    Host.hide()
+                    SexEvent10 = true
+                Endif
+            Endif
+            If Random(0,100) < sneak && [DidDrink || DidDancing] && [PartyType == 7 || [Aphrodisiac && AlcoholLevel > 200]]
+                If !GuestSex1 && Guest5.isNaked() && Guest4.isNaked() && [Guest5.isInterestedIn(Guest4) || Guest4.isInterestedIn(Guest5)]
+                    Guest5.hide()
+                    Guest4.hide()
+                    "As I came back to the living room I saw that <Guest5.name> and <Guest4.name> were having sex infront of everyone!!"
+                    SexNoAffair(Guest5, Guest4)
+                    GuestSex1 = true
+                Elseif !GuestSex2 && Guest3.isNaked() && Guest2.isNaked() && [Guest3.isInterestedIn(Guest2) || Guest2.isInterestedIn(Guest3)]
+                    Guest3.hide()
+                    Guest2.hide()
+                    "As I came back to the living room I saw that <Guest3.name> and <Guest2.name> were having sex infront of everyone!!"
+                    SexNoAffair(Guest3, Guest2)
+                    GuestSex2 = true
+                Elseif !GuestSex3 && Guest5.isNaked() && Guest1.isNaked() && [Guest1.isInterestedIn(Guest5) || Guest5.isInterestedIn(Guest1)]
+                    Guest5.hide()
+                    Guest1.hide()
+                    "As I came back to the living room I saw that <Guest5.name> and <Guest1.name> were having sex infront of everyone!!"
+                    SexNoAffair(Guest5, Guest1)
+                    GuestSex3 = true
+                Elseif !GuestSex5 && Guest5.isNaked() && Guest2.isNaked() && Guest1.isNaked() && [Guest1.isInterestedIn(Guest5) || Guest5.isInterestedIn(Guest1) || Guest2.isInterestedIn(Guest1)]
+                    Guest5.hide()
+                    Guest2.hide()
+                    Guest1.hide()
+                    "As I came back to the living room I saw that <Guest5.name>, <Guest2.name> and <Guest1.name> were having sex infront of everyone!!"
+                    SexNoAffair(Guest5, Guest2, Guest1)
+                    GuestSex5 = true
+                Elseif !GuestSex6 &&Guest4.isNaked() && Guest3.isNaked() && Guest1.isNaked() && [Guest4.isInterestedIn(Guest3) || Guest3.isInterestedIn(Guest1) || Guest1.isInterestedIn(Guest4)] 
+                    Guest4.hide()
+                    Guest3.hide()
+                    Guest1.hide()
+                    "As I came back to the living room I saw that <Guest4.name>, <Guest3.name> and <Guest1.name> were having sex infront of everyone!!"
+                    SexNoAffair(Guest5, Guest2, Guest1)
+                    GuestSex6 = true
+                Elseif PartyType != 7 && !PlayerHosting && Host.isValid() && Host.isNaked() && Host.isInterestedIn(Player) && Player.isInterestedIn(Host) && !GuestSex4
+                    Guest1.hide()
+                    Guest2.hide()
+                    Guest3.hide()
+                    Guest4.hide()
+                    Guest5.hide()
+                    Host(Flirty):: "<Player.name>! I need to fuck! Right now!!"
+                    "<Host.name> made a step towards me and grabbed me."
+                    Player(Happy):: "Woh woh woh ... take it easy!"
+                    Host(Angry):: "<Player.name>! RIGHT!! NOW!!!"
+                    SexNoAffair(Player, Host)
+                    GuestSex4 = true
+                Endif
+                If PartyType == 7
+                    setBackground3D(Modules/sb_PartyAndNightlife/Bedrooms/sb_PNL_livingroom02.lpworld)
+                Endif
+            Endif
+            If Aphrodisiac
+                Guest1:arousal += 1000
+                Guest2:arousal += 1000
+                Guest3:arousal += 1000
+                Guest4:arousal += 1000
+                Guest5:arousal += 1000
+                Player:arousal += 1000
+                Host:arousal += 1000
+            Elseif Guest1.isNaked() && PartyType != 5 && PartyType != 7
+                Guest1.dress()
+            Elseif Guest2.isNaked() && PartyType != 5 && PartyType != 7
+                Guest2.dress()
+            Elseif Guest3.isNaked() && PartyType != 5 && PartyType != 7
+                Guest3.dress()
+            Elseif Guest4.isNaked() && PartyType != 5 && PartyType != 7
+                Guest4.dress()
+            Elseif Guest5.isNaked() && PartyType != 5 && PartyType != 7
+                Guest5.dress()
+            Elseif Host.isNaked() && PartyType != 5 && PartyType != 7
+                Host.dress()
+            Elseif Player.isNaked() && PartyType != 5 && PartyType != 7
+                Player.dress()
+            Endif
+            
+            If !PlayerHosting
+                Player.hide()
+                Host.show(0)
+                Host.closeEyes(false)
+            Else
+                Player.show(0)
+            Endif
+            Guest1.show(1)
+            Guest2.show(2)
+            Guest3.show(3)
+            Guest4.show(4)
+            Guest5.show(5)
+            
+            Guest1.closeEyes(false)
+            Guest2.closeEyes(false)
+            Guest3.closeEyes(false)
+            Guest4.closeEyes(false)
+            Guest5.closeEyes(false)
+            
+            passTime(0.1, 0.6)
+            DidDrink = false
+            DidDancing = false
+            PartySitting = false
+            
+            // Guest1 drinks
+            toxfactor = AlcoholLevel
+            toxfactor -= Guest1:fitness
+            toxfactor = toxfactor/10
+            Guest1:intoxication += Random(0,6)*toxfactor
+            // Guest2 drinks
+            toxfactor = AlcoholLevel
+            toxfactor -= Guest2:fitness
+            toxfactor = toxfactor/10
+            Guest2:intoxication += Random(0,6)*toxfactor
+            // Guest3 drinks
+            toxfactor = AlcoholLevel
+            toxfactor -= Guest3:fitness
+            toxfactor = toxfactor/10
+            Guest3:intoxication += Random(0,6)*toxfactor
+            // Guest4 drinks
+            toxfactor = AlcoholLevel
+            toxfactor -= Guest4:fitness
+            toxfactor = toxfactor/10
+            Guest4:intoxication += Random(0,6)*toxfactor
+            // Guest5 drinks
+            toxfactor = AlcoholLevel
+            toxfactor -= Guest5:fitness
+            toxfactor = toxfactor/10
+            Guest5:intoxication += Random(0,6)*toxfactor
+            
+            If !PlayerHosting
+                // Host drinks
+                toxfactor = AlcoholLevel
+                toxfactor -= Host:fitness
+                toxfactor = toxfactor/10
+                Host:intoxication += Random(0,6)*toxfactor
+            Endif
+            
+            "What should I do now?"
+            0:: "I'm the DJ now!"
+            1:: "Dance"
+            2:: "Invite someone to dance"
+            3:: "Sit and talk with a guest"
+            4:: "Drink alcohol"
+            5:: "Spike the party punch"
+            7:: timePassed > 1:: "<LeaveString>"
+            
+            If 4
+                Player.hide()
+                If intoxication < 80 && SexEvent9 && !RapeDrugs
+                    Player():: "(Oh wait ... didn't <Guest2.name> piss into ...)"
+                    0:: "Drink it"
+                    1:: "That's disgusting ..."
+                    
+                    If 0
+                        "I poured myself a drink and enjoyed it thoroughly."
+                        perversion += Random(1,2.5)
+                        intoxication += Random(0, 15)
+                    Endif
+                Elseif intoxication < 80 && SexEvent11 && !RapeDrugs
+                    Player():: "(Oh wait ... didn't <Host.name> jerk into ...)"
+                    0:: "Drink it"
+                    1:: "That's disgusting ..."
+                    
+                    If 0
+                        "I poured myself a drink and enjoyed it thoroughly."
+                        perversion += Random(1,2.5)
+                        intoxication += Random(0, 15)
+                    Endif
+                Elseif SexEvent9 && !RapeDrugs
+                    "I poured myself a drink and enjoyed it thoroughly."
+                    Player():: "(OH FUCK! ... I forgot ... there's some piss in it ...)"
+                    intoxication += Random(0, 15)
+                Elseif SexEvent11 && !RapeDrugs
+                    "I poured myself a drink and enjoyed it thoroughly."
+                    Player():: "(OH FUCK! ... I forgot ... <Host.name> came into it ...)"
+                    intoxication += Random(0, 15)
+                Elseif intoxication < 80 && RapeDrugs
+                    "I poured myself a drink ... oh wait, there are rape drugs in it!"
+                    0:: "Drink it"
+                    1:: "Better not ..."
+                    
+                    If 0
+                        "I poured myself a drink and enjoyed it thoroughly."
+                        perversion += Random(1,2.5)
+                        intoxication += Random(0, 15)
+                        VeryBadIdea = true
+                    Endif
+                Elseif RapeDrugs
+                    "I poured myself a drink and enjoyed it thoroughly."
+                    Player():: "(OH FUCK! ... I forgot ... there are rape drugs in it!)"
+                    VeryBadIdea = true
+                    intoxication += Random(0, 15)
+                Else
+                    "I poured myself a drink and enjoyed it thoroughly."
+                    intoxication += Random(0, 15)
+                Endif
+                passTime(0.05, 0.1)
+                DidDrink = true
+            Elseif 1
+                Player.hide()
+                "I walked towards the dance floor and started dancing! Yeah."
+                If Random(0,100) < dance
+                    AlcoholLevel += 10
+                    Random
+                        Guest1(Happy):: "Hell yeah!"
+                        Guest2(Happy):: "Look at this!"
+                        Guest3(Happy):: "Wow!"
+                        Guest4(Happy):: "Hahahahahaha that's great!"
+                        Guest5(Happy):: "Now the party's really starting!"
+                        Guest1(Happy):: "Look! <Player.He_or_She> is great!"
+                        Guest2(Happy):: "That's so much fun!"
+                        Guest3(Happy):: "I love being here!"
+                        Guest4(Happy):: "Let's dance too!"
+                        Guest5(Happy):: "Yeha! Let's dance too!"
+                        Guest1(Happy):: "I love this music!"
+                        Guest2(Happy):: "Look how <Player.he_or_she> moves!"
+                        Guest3(Happy):: "Hahahahahaha that's great!"
+                        Guest4(Happy):: "Now the party's really starting!"
+                        Guest5(Happy):: "Look! <Player.He_or_She> is great!"
+                    endRandom
+                    If Guest1.isInterestedIn(Player)
+                        Guest1:attractiontoplayer += dance*Random(0, 0.05)
+                    Else
+                        Guest1:rapportwithplayer += dance*Random(0, 0.05)
+                    Endif
+                    If Guest2.isInterestedIn(Player)
+                        Guest2:attractiontoplayer += dance*Random(0, 0.05)
+                    Else
+                        Guest2:rapportwithplayer += dance*Random(0, 0.05)
+                    Endif
+                    If Guest3.isInterestedIn(Player)
+                        Guest3:attractiontoplayer += dance*Random(0, 0.05)
+                    Else
+                        Guest3:rapportwithplayer += dance*Random(0, 0.05)
+                    Endif
+                    If Guest4.isInterestedIn(Player)
+                        Guest4:attractiontoplayer += dance*Random(0, 0.05)
+                    Else
+                        Guest4:rapportwithplayer += dance*Random(0, 0.05)
+                    Endif
+                    If Guest5.isInterestedIn(Player)
+                        Guest5:attractiontoplayer += dance*Random(0, 0.05)
+                    Else
+                        Guest5:rapportwithplayer += dance*Random(0, 0.05)
+                    Endif
+                    If !PlayerHosting && Host.isInterestedIn(Player)
+                        Host:attractiontoplayer += dance*Random(0, 0.05)
+                    Elseif !PlayerHosting
+                        Host:rapportwithplayer += dance*Random(0, 0.05)
+                    Endif
+                Else
+                    AlcoholLevel -= 10
+                    Random
+                        Guest1(Happy):: "Uhmmm ..."
+                        Guest2(Happy):: "That's .... special ..."
+                        Guest3(Happy):: "Oha!"
+                        Guest4(Happy):: "Hahahahahaha that's funny!"
+                        Guest5(Happy):: "Now the party's really starting!"
+                        Guest1(Happy):: "Look! <Player.He_or_She> is funny!"
+                        Guest2(Happy):: "That's so much fun!"
+                        Guest3(Happy):: "<Player.He_or_She> out of control ..."
+                        Guest4(Happy):: "<Player.He_or_She> should stop dancing ..."
+                        Guest5(Happy):: "..."
+                        Guest1(Happy):: "I love this music, but this ... looks ... funny?!?"
+                        Guest2(Happy):: "Look how <Player.he_or_she> makes funny moves!"
+                        Guest3(Happy):: "Hahahahahaha that's funny!"
+                        Guest4(Happy):: "I better go for another drink ..."
+                        Guest5(Happy):: "Look! <Player.He_or_She> is sooo funny!"
+                    endRandom
+                Endif
+                DidDancing = true
+                passTime(0.1, 0.4)
+            Elseif 2
+                PartyDancing = false
+                If !Guest5.isSameGender(Host) && PartyType == 2
+                    Dance5String = "Ask the <Guest5.groom_or_bride>"
+                    DanceHostString = "Ask the <Host.groom_or_bride>"
+                Else
+                    DanceHostString = "Ask the host"
+                    Dance5String = "Ask <Guest5.name>"
+                Endif
+                "Who do you want to invite?"
+                1:: "Ask <Guest1.name>"
+                2:: "Ask <Guest2.name>"
+                3:: "Ask <Guest3.name>"
+                4:: "Ask <Guest4.name>"
+                5:: "<Dance5String>"
+                6:: !PlayerHosting:: "<DanceHostString>"
+                7:: "Back"
+                
+                If 1 
+                    DanceWith = Guest1
+                    PartyDancing = true
+                Elseif 2
+                    DanceWith = Guest2
+                    PartyDancing = true
+                Elseif 3
+                    DanceWith = Guest3
+                    PartyDancing = true
+                Elseif 4 
+                    DanceWith = Guest4
+                    PartyDancing = true
+                Elseif 5 
+                    DanceWith = Guest5
+                    PartyDancing = true
+                Elseif 6 
+                    DanceWith = Host
+                    PartyDancing = true
+                Elseif 7
+                    PartyDancing = false
+                Endif
+                
+                If PartyDancing
+                    Guest1.hide()
+                    Guest2.hide()
+                    Guest3.hide()
+                    Guest4.hide()
+                    Guest5.hide()
+                    Host.hide()
+                    Player.show(3)
+                    DanceWith.show(2)
+                    
+                    Player(Happy):: "Would you like to join me on the dance floor?"
+                    If Aphrodisiac || [DanceWith.isInterestedIn(Player) && [DanceWith.isProstitute() || DanceWith:attractiontoplayer > Random(10, 20) || DanceWith:rapportwithplayer > Random(10, 20) || [DanceWith.isRelative() && DanceWith:incest > Random(0, 20)]]]
+                        DanceWith(Happy):: "Of course, I'd love to!"
+                        DanceAccepted = true
+                    Else
+                        DanceWith(Sad):: "Sorry, I'm not too keen on dancing ..."
+                        DanceAccepted = false
+                        passTime(0.5, 0.1)
+                    Endif
+                    
+                    If DanceAccepted && Aphrodisiac && DanceWith.isNaked()
+                        Guest1.hide()
+                        Guest2.hide()
+                        Guest3.hide()
+                        Guest4.hide()
+                        Guest5.hide()
+                        Host.hide()
+                        Player.show(2)
+                        DanceWith.show(1)
+                        "We walked towards the dance floor and started dancing together."
+                        "But I could clearly see that <DanceWith.name> had already trouble to concentrate ..."
+                        If DanceWith.isInterestedIn(Player)
+                            If Player.isMale() || Player.isTrans()
+                                "After a short moment <DanceWith.name> just stopped, went down on <DanceWith.his_or_her> knees and grabbed my cock and wrapped <DanceWith.his_or_her> lips around it."
+                                "Giving me a blowjob infront of everyone!"
+                                Filter(Blowjob)
+                                SexNoAffair(Player, DanceWith)
+                                Player.hide()
+                                DanceWith.hide()
+                            Else
+                                "After a short moment <DanceWith.name> just stopped, pushed me down onto the floor and wrapped <DanceWith.his_or_her> lips around pussy."
+                                "Licking me infront of everyone!"
+                                Filter(Licking)
+                                SexNoAffair(Player, DanceWith)
+                                Player.hide()
+                                DanceWith.hide()
+                            Endif
+                        Endif
+                        passTime(0.1, 0.4)
+                    Elseif DanceAccepted
+                        Guest1.hide()
+                        Guest2.hide()
+                        Guest3.hide()
+                        Guest4.hide()
+                        Guest5.hide()
+                        Host.hide()
+                        Player.show(2)
+                        DanceWith.show(1)
+                        "We walked towards the dance floor and started dancing together."
+                        
+                        If DanceWith.isInterestedIn(Player) && !DanceWith.isRelative()
+                            DanceWith:attractiontoplayer += dance*Random(0, 2)
+                            "<DanceWith.name> seems to be enjoying this dance with me."
+                        Elseif DanceWith.isInterestedIn(Player) && DanceWith.isRelative()
+                            DanceWith:incest += dance*Random(0, 2)
+                            "<DanceWith.name> seems to be enjoying this dance with me."
+                        Else
+                            DanceWith:rapportwithplayer += dance*Random(0, 2)
+                        Endif
+                        
+                        "After a while we went back."
+                        passTime(0.1, 0.4)
+                    Endif
+                Endif
+            Elseif 0
+                Player.hide()
+                "I went over there and logged into my Spotify account. I quickly found the best music! Yeah."
+                If Guest1.isInterestedIn(Player)
+                    Guest1:attractiontoplayer += music*Random(0, 0.05)
+                Else
+                    Guest1:rapportwithplayer += music*Random(0, 0.05)
+                Endif
+                If Guest2.isInterestedIn(Player)
+                    Guest2:attractiontoplayer += music*Random(0, 0.05)
+                Else
+                    Guest2:rapportwithplayer += music*Random(0, 0.05)
+                Endif
+                If Guest3.isInterestedIn(Player)
+                    Guest3:attractiontoplayer += music*Random(0, 0.05)
+                Else
+                    Guest3:rapportwithplayer += music*Random(0, 0.05)
+                Endif
+                If Guest4.isInterestedIn(Player)
+                    Guest4:attractiontoplayer += music*Random(0, 0.05)
+                Else
+                    Guest4:rapportwithplayer += music*Random(0, 0.05)
+                Endif
+                If Guest5.isInterestedIn(Player)
+                    Guest5:attractiontoplayer += music*Random(0, 0.05)
+                Else
+                    Guest5:rapportwithplayer += music*Random(0, 0.05)
+                Endif
+                If !PlayerHosting && Host.isInterestedIn(Player)
+                    Host:attractiontoplayer += music*Random(0, 0.05)
+                Elseif !PlayerHosting
+                    Host:rapportwithplayer += music*Random(0, 0.05)
+                Endif
+                If Random(0,100) < music
+                    AlcoholLevel += 10
+                    Random
+                        Guest1(Happy):: "Hell yeah!"
+                        Guest2(Happy):: "I love this song!"
+                        Guest3(Happy):: "Wow, that's great music!"
+                        Guest4(Happy):: "Hahahahahaha that's a great song!"
+                        Guest5(Happy):: "Now the party's really starting!"
+                        Guest1(Happy):: "Look! <Player.He_or_She> is a great DJ!"
+                        Guest2(Happy):: "That's so much fun!"
+                        Guest3(Happy):: "I love being here!"
+                        Guest4(Happy):: "Let's dance!"
+                        Guest5(Happy):: "Yeha! Let's dance!"
+                        Guest1(Happy):: "I love this music!"
+                        Guest2(Happy):: "<Player.He_or_She> has a great taste of music!"
+                        Guest3(Happy):: "Hahahahahaha that's great!"
+                        Guest4(Happy):: "Now the party's really starting!"
+                        Guest5(Happy):: "Look! <Player.He_or_She> wants us to dance!"
+                    endRandom
+                Else
+                    AlcoholLevel -= 10
+                    Random
+                        Guest1(Happy):: "Uhmmm ..."
+                        Guest2(Happy):: "That's .... special ..."
+                        Guest3(Happy):: "Oha! I don't like this ..."
+                        Guest4(Happy):: "Hahahahahaha that's weird!"
+                        Guest5(Happy):: "Now the party's going down."
+                        Guest1(Happy):: "Look! <Player.He_or_She> tries to be funny!"
+                        Guest2(Happy):: "That's not funny!"
+                        Guest3(Happy):: "<Player.He_or_She> out of control ..."
+                        Guest4(Happy):: "<Player.He_or_She> should stop ..."
+                        Guest5(Happy):: "..."
+                        Guest1(Happy):: "I love to dance, but this ... is ... not my kind of music?!?"
+                        Guest2(Happy):: "Look how <Player.he_or_she> tries to be a DJ!"
+                        Guest3(Happy):: "Hahahahahaha that's funny!"
+                        Guest4(Happy):: "I better go for another drink ..."
+                        Guest5(Happy):: "I don't like this ..."
+                    endRandom
+                Endif
+                passTime(0.1, 0.4)
+            Elseif 5
+                If !Spiked 
+                    "You wait until nobody is around ..."
+                    Guest1.hide()
+                    Guest2.hide()
+                    Guest3.hide()
+                    Guest4.hide()
+                    Guest5.hide()
+                    Host.hide()
+                    Player.show(0)
+                    "With what do you want to spike the party punch?"
+                    0:: "More alcohol! (You need <GuestNumber> x alcohol)"
+                    1:: "Chinese aphrodisiacs! (You need <GuestNumber> x aphrodisiac)"
+                    2:: "Rape drugs! (You need <GuestNumber> x rape drugs)"
+                    3:: "No"
+                    
+                    If 0
+                        If DebugLog || Player:stock_alcohol >= GuestNumber
+                            "Hahahahaha! This will make sure the party will be a blast!"
+                            karma -= Random(0.5,3)
+                            AlcoholLevel = 150
+                            Player:stock_alcohol -= GuestNumber
+                            Spiked = true
+                        Else
+                            stock = Player:stock_alcohol
+                            "I can't, because I need more alcohol! (You have <stock> shots at the moment)"
+                            "For every guest I need one shot, otherwise it will not have any effect ..."
+                        Endif
+                    Elseif 1
+                        If !isModEnabled(sb_BetterPregnancy)
+                            "(The Author: Chinese Aphrodisiacs are only available if you have my Better Pregnancy mod installed)"
+                        Elseif DebugLog || Player:stock_chineseaphrodisiac >= GuestNumber
+                            "It works! This will make sure the party will be a porn party!"
+                            karma -= Random(5,10)
+                            Aphrodisiac = true
+                            Player:stock_chineseaphrodisiac -= GuestNumber
+                            Spiked = true
+                        Else
+                            stock = Player:stock_chineseaphrodisiac
+                            "I can't, because I don't have enough aphrodisiacs! (You have <stock> pills at the moment)"
+                            "For every guest I need one pill, otherwise it will not work ..."
+                        Endif
+                    Elseif 2
+                        If !isModEnabled(sb_BetterPregnancy)
+                            "(The Author: Rape drugs are only available if you have my Better Pregnancy mod installed)"
+                        Elseif DebugLog || Player:stock_rapedrug >= GuestNumber
+                            "AMAZING! HRHRHR ... This will make sure I'll get everything I want!"
+                            karma -= Random(5,25)
+                            Aphrodisiac = true
+                            AlcoholLevel = 350
+                            RapeDrugs = true
+                            Player:stock_rapedrug -= GuestNumber
+                            Spiked = true
+                        Else    
+                            stock = Player:stock_rapedrug
+                            "I can't, because I don't have enough rape drugs! (You have <stock> pills at the moment)"
+                            "For every guest I need one pill, otherwise it will not work ..."
+                        Endif
+                    Endif
+                Else
+                    "I already spiked the punch! If I would put anything more into it would kill everyone!"
+                Endif
+            Elseif 7
+                If PlayerHosting
+                    "As the host, I decided that the party had run its course and ended it. Everyone promptly left ..."
+                Else
+                    "I decided to leave the party ..."
+                Endif
+                PartyOngoing = false
+            Elseif 3
+                PartySitting = true
+                while PartySitting && PartyOngoing
+                    If !Guest5.isSameGender(Host) && PartyType == 2
+                        Sit5String = "Ask the <Guest5.groom_or_bride>"
+                        SitHostString = "Ask the <Host.groom_or_bride>"
+                    Else
+                        SitHostString = "Sit with the host"
+                        Sit5String = "Sit with <Guest5.name>"
+                    Endif
+                    "Who do you want to talk to?"
+                    1:: "Sit with <Guest1.name>"
+                    2:: "Sit with <Guest2.name>"
+                    3:: "Sit with <Guest3.name>"
+                    4:: "Sit with <Guest4.name>"
+                    5:: "<Sit5String>"
+                    6:: !PlayerHosting:: "<SitHostString>"
+                    7:: "Back"
+
+                    If 1
+                        NewSitWith = Guest1
+                    Elseif 2
+                        NewSitWith = Guest2
+                    Elseif 3
+                        NewSitWith = Guest3
+                    Elseif 4
+                        NewSitWith = Guest4
+                    Elseif 5
+                        NewSitWith = Guest5
+                    Elseif 6
+                        NewSitWith = Host
+                    Elseif 7
+                        PartySitting = false
+                    Endif
+                    
+                    If !SitWith.isSameAs(NewSitWith)
+                        Flirts = 0
+                    Endif
+
+                    SitWith = NewSitWith
+                    
+                    Guest1.hide()
+                    Guest2.hide()
+                    Guest3.hide()
+                    Guest4.hide()
+                    Guest5.hide()
+                    Host.hide()
+                    Player.show(0)
+                    SitWith.show(2)
+                    
+                    choice = -1
+                    drink = false
+                    hadSex = false
+                    Compliment = false
+                    TryToKiss = false
+                    Vanilla = IsModEnabled(vin_VanillaRealistic)
+                    
+                    While choice < 8 && PartySitting && PartyOngoing
+                        KissBack = false
+                        TryToKiss = false
+                        
+                        // Offered a drink
+                        If !drink && !hadSex && Random(50, 100) < SitWith:perversion + SitWith:attractiontoplayer + SitWith:rapportwithplayer
+                            "<SitWith.name> offered me another drink. Shall I?"
+                            "Do you want another drink?"
+                            0:: "One more is okay"
+                            1:: "No thanks"
+                                
+                            If 0
+                                "We had a drink together ..."
+                                passTime(0.05, 0.1)
+                                drink = true
+                                intoxication += Random(0, 15)
+                                toxfactor = AlcoholLevel
+                                toxfactor -= SitWith:fitness
+                                toxfactor = toxfactor/10
+                                SitWith:intoxication += Random(0,6)*toxfactor
+                            Endif
+                        Endif
+                        
+                        // Ask for number
+                        If !SitWith.isContactExchanged()
+                            If [SitWith.IsDominantSex(Player) && !SitWith.IsInterestedIn(Player)] && [SitWith:attractiontoplayer > Random(30, 60) || SitWith:rapportwithplayer > Random(30, 60)]
+                                SitWith(Happy):: "Hey, I just realized I didn't have your number. Do you mind ..."
+                                0:: "Exchange contacts"
+                                1:: "Sorry but NO!"
+                                
+                                If 0
+                                    Player(Excited):: "Of course! Let's exchange numbers!"
+                                    exchangeContact(SitWith)
+                                    SitWith:rapportwithplayer += Random(0, 5)
+                                Else
+                                    Player(Sad):: "I'm afraid I don't know you well enough yet for that."
+                                    SitWith:rapportwithplayer -= Random(0, 3)
+                                Endif
+                                passTime(0.05, 0.1)
+                            Endif
+                        Endif
+                        
+                        // Checked out
+                        If !SitWith.hadSex() && [[SitWith.isProstitute() && !isModEnabled(sb_PimpYourGirl)] || [[SitWith.IsInterestedIn(Player) && SitWith:attractiontoplayer > 20] || intoxication > 90]]
+                            "Maybe it's the alcohol ..."
+                            "But from the way <SitWith.name> was checking me out, I could tell that <SitWith.he_or_she> was totally into me."
+                            If PartyType == 7 && !SitWith.hadSex() && !Player.isFemale() && Player.isInterestedIn(SitWith) && SitWith.IsInterestedIn(Player) && SitWith:attractiontoplayer > 40 && !SitWith.isSameAs(Guest4) && [!Guest4.isDating() || OpenRelationship()]
+                                Random
+                                    SitWith(Flirty):: "I really like you ..."
+                                    SitWith(Flirty):: "You're cute ..."
+                                endRandom
+                                "<SitWith.Name> touches your cock with <SitWith.his_or_her> fingertip ..."
+                                SitWith(Flirty):: "Would you mind if I offered you a kiss?"
+                                0:: "Kiss her"
+                                1:: "Not yet"
+                                
+                                If 0
+                                    "<SitWith.He_or_She>'s moving closer. You shut your eyes in anticipation of a kiss."
+                                    SitWith.show(4)
+                                    "But instead of feeling <SitWith.his_or_her> lips on yours, you notice that <SitWith.he_or_she> takes your cock in <SitWith.his_or_her> mouth."
+                                    "It doesn't seem to bother <SitWith.him_or_her> that everyone's watching ..."
+                                    Filter(Blowjob, Penetration)
+                                    Sex(SitWith, Player)
+                                    setBackground3D(Modules/sb_PartyAndNightlife/Bedrooms/sb_PNL_livingroom02.lpworld)
+                                    Player.show(0)
+                                    SitWith.show(2)
+                                    SitWith(Flirty):: "That was great! Thank you."
+                                Endif
+                            Endif
+                        Endif
+                        
+                        // Player actions
+                        "What should I suggest to <SitWith.name> that we do?"
+                        0:: "Chat"
+                        1:: !drink:: "Offer <SitWith.him_or_her> a drink"
+                        2:: !SitWith.isContactExchanged():: "Ask <SitWith.his_or_her> for number"
+                        3:: !hadSex && [!SitWith.isRelative() || isModEnabled(vin_Incest)]:: "Compliment <SitWith.him_or_her>"
+                        4:: !hadSex && [!SitWith.isRelative() || isModEnabled(vin_Incest)]:: "Flirt"
+                        7:: !hadSex && [!SitWith.isRelative() || isModEnabled(vin_Incest)]:: "Kiss <SitWith.him_or_her>"
+                        9:: "Back"
+
+                        If 0
+                            If SitWith.isRelative()
+                                "I spent some time chatting with my <SitWith.relationship>."
+                            Else
+                                "I spent some time chatting with <SitWith.name>."
+                            Endif
+                        
+                            // Status
+                            If SitWith:intoxication > 99
+                                "It looks like <SitWith.name> is wasted ..."
+                            Elseif SitWith:intoxication > 90
+                                "It looks like <SitWith.he_or_she>'s hammered ..."
+                            Elseif SitWith:intoxication > 50
+                                "It looks like <SitWith.he_or_she>'s having fun ..."
+                            Elseif SitWith:intoxication > 30
+                                "It seems <SitWith.name> is a little bit tipsy ..."
+                            Elseif SitWith:intoxication < 31
+                                "It seems <SitWith.name> didn't drink much, <SitWith.he_or_she> is still sober ..."
+                            Endif
+                            
+                            If Aphrodisiac || SitWith:arousal > 90
+                                "And I can see <SitWith.he_or_she> is horny as fuck!"
+                            Endif
+                            
+                            If SitWith.IsInterestedIn(Player) && Random(0, 100) < attractiveness && !SitWith.isRelative()
+                                SitWith:attractiontoplayer += Random(-1, 2)
+                            Elseif SitWith.isRelative() || SitWith.isDating() || SitWith.isAffair()
+                                SitWith:rapportwithplayer += Random(0, 0.1)
+                            Else
+                                SitWith:rapportwithplayer += Random(-1, 2)
+                            Endif
+                            passTime(0.3, 0.5)
+                        Elseif 1
+                            If !SitWith.isRelative() && [Aphrodisiac || Random(0, 100) < SitWith:perversion + SitWith:attractiontoplayer + SitWith:rapportwithplayer]
+                                "We had a drink together ..."
+                                passTime(0.05, 0.1)
+                                drink = true
+                                intoxication += Random(0, 15)
+                                toxfactor = AlcoholLevel
+                                toxfactor -= SitWith:fitness
+                                toxfactor = toxfactor/10
+                                SitWith:intoxication += Random(0,6)*toxfactor
+                            Elseif SitWith.isRelative() && [Aphrodisiac || Random(0, 100) < SitWith:perversion + SitWith:incest + SitWith:rapportwithplayer]
+                                "We had a drink together ..."
+                                passTime(0.05, 0.1)
+                                drink = true
+                                intoxication += Random(0, 15)
+                                toxfactor = AlcoholLevel
+                                toxfactor -= SitWith:fitness
+                                toxfactor = toxfactor/10
+                                SitWith:intoxication += Random(0,6)*toxfactor
+                            Else
+                                Random
+                                    SitWith(Happy):: "Not at the moment ... thank you."
+                                    SitWith(Happy):: "Oh, thank you. But I'll skip this one."
+                                    SitWith(Happy):: "No, I'm still fighting with this one."
+                                    SitWith(Happy):: "No thanks, not at the moment."
+                                    SitWith(Happy):: "No thank you, maybe later."
+                                endRandom
+                            Endif
+                            passTime(0.05, 0.1)
+                            drink = true
+                        Elseif 2
+                            Player(Happy):: "You know what? Let's exchange numbers so that we can keep in touch after the party."
+                            If Aphrodisiac || SitWith:attractiontoplayer > Random(20, 40) || SitWith:rapportwithplayer > Random(0, 30) || SitWith:intoxication > Random(50, 100)
+                                SitWith(Excited):: "Of course! Let's exchange numbers!"
+                                exchangeContact(SitWith)
+                            Else
+                                SitWith(Sad):: "I'm afraid I don't know you well enough yet for that. Maybe next time."
+                            Endif
+                            passTime(0.05, 0.1)
+                        Elseif 3
+                            If Compliment
+                                "I think that's would be too much for now. Even if <SitWith.name> is receptive to it."
+                                impressed = false
+                            Else
+                                impressed = false
+                                If SitWith:masochist > 0 && [SitWith.isDating() || SitWith.isAffair() || SitWith.isProstitute()]
+                                    "<SitWith.name> seems receptive to my advances."
+                                    SitWith:attractiontoplayer += Random(0, 0.25)
+                                    impressed = true
+                                Elseif !SitWith.isRelative() && SitWith.isInterestedIn(Player) && [Random(0, 100) < SitWith:perversion + SitWith:attractiontoplayer + interpersonal || Aphrodisiac]
+                                    "<SitWith.name> seems receptive to my advances."
+                                    SitWith:attractiontoplayer += Random(0, 0.25)
+                                    impressed = true
+                                Elseif SitWith.isRelative() && SitWith.isInterestedIn(Player) && isModEnabled(vin_Incest) && [Random(0, 100) < SitWith:perversion + SitWith:incest + interpersonal || Aphrodisiac]
+                                    "<SitWith.name> seems receptive to my advances."
+                                    SitWith:incest += Random(0, 0.25)
+                                    impressed = true
+                                Else
+                                    "The compliment fails to impress my <SitWith.name>."
+                                    SitWith:attractiontoplayer -= Random(0, 0.25)
+                                    impressed = false
+                                Endif
+                                
+                                If [SitWith.isDating() || SitWith.isAffair() || SitWith.isProstitute()]
+                                    If impressed && SitWith:masochist > 0 && Flirts > 0 && [SitWith:intoxication > 50 || SitWith:attractiontoplayer > 30]
+                                        "<SitWith.name> opens slightly <SitWith.his_or_her> lips and is softly touching my neck ..."
+                                        SitWith:arousal += Random(0, 5.5)
+                                    Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [SitWith:intoxication > 40 || SitWith:attractiontoplayer > 30]
+                                        "<SitWith.name> looks deep into my eyes and opens slightly <SitWith.his_or_her> lips ..."
+                                        SitWith:arousal += Random(0, 4.5)
+                                    Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [SitWith:intoxication > 30 || SitWith:attractiontoplayer > 30]
+                                        "<SitWith.name> looks deep into my eyes and smiles at me ..."
+                                        SitWith:arousal += Random(0, 3.5)
+                                    Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [SitWith:intoxication > 20 || SitWith:attractiontoplayer > 20]
+                                        "<SitWith.name> looks deep into my eyes ..."
+                                        SitWith:arousal += Random(0, 2.5)
+                                    Elseif impressed && SitWith:masochist > 0 && [SitWith:intoxication > 10 || SitWith:attractiontoplayer > 10]
+                                        "<SitWith.name> smiles at me ..."
+                                        SitWith:arousal += Random(0, 1.5)
+                                    Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 0 && [SitWith:intoxication > 50 || SitWith:attractiontoplayer > 30]
+                                        "<SitWith.name> opens slightly <SitWith.his_or_her> lips and is softly grabbing my hair ..."
+                                        SitWith:arousal += Random(0, 7.5)
+                                        TryToKiss = true
+                                    Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 0 && [SitWith:intoxication > 40 || SitWith:attractiontoplayer > 30]
+                                        "<SitWith.name> looks deep into my eyes and strokes softly over my lips ..."
+                                        SitWith:arousal += Random(0, 5.5)
+                                    Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 0 && [SitWith:intoxication > 30 || SitWith:attractiontoplayer > 30]
+                                        "<SitWith.name> comes closer to me ..."
+                                        SitWith:arousal += Random(0, 4.5)
+                                    Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 0 && [SitWith:intoxication > 20 || SitWith:attractiontoplayer > 20]
+                                        "<SitWith.name> looks deep into my eyes ... and touches inadvertently softly over my crotch ..."
+                                        SitWith:arousal += Random(0, 3.5)
+                                    Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && [SitWith:intoxication > 10 || SitWith:attractiontoplayer > 10]
+                                        "<SitWith.name> touches my thigh ..."
+                                        SitWith:arousal += Random(0, 2.5)
+                                    Elseif !impressed && SitWith:masochist < -20
+                                        SitWith(Happy):: "Why are you looking at me like this? Is something wrong?"
+                                    Else
+                                        "<SitWith.name> simply looks at me ..."
+                                    Endif
+                                Endif
+                                
+                                If !SitWith.hasRelationship(Dating, Spouses) && !SitWith.isDating() && !SitWith.isAffair() && !SitWith.isProstitute() && !SitWith.isRelative()
+                                    If impressed && SitWith:masochist > 0 && Flirts > 0 && [SitWith:intoxication > 80 || SitWith:attractiontoplayer > 50]
+                                        "<SitWith.name> opens slightly <SitWith.his_or_her> lips and is softly touching my neck ..."
+                                        SitWith:arousal += Random(0, 5.5)
+                                    Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [SitWith:intoxication > 60 || SitWith:attractiontoplayer > 50]
+                                        "<SitWith.name> looks deep into my eyes and opens slightly <SitWith.his_or_her> lips ..."
+                                        SitWith:arousal += Random(0, 4.5)
+                                    Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [SitWith:intoxication > 40 || SitWith:attractiontoplayer > 40]
+                                        "<SitWith.name> looks deep into my eyes and smiles at me ..."
+                                        SitWith:arousal += Random(0, 3.5)
+                                    Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [SitWith:intoxication > 30 || SitWith:attractiontoplayer > 30]
+                                        "<SitWith.name> looks deep into my eyes ..."
+                                        SitWith:arousal += Random(0, 2.5)
+                                    Elseif impressed && SitWith:masochist > 0 && [SitWith:intoxication > 20 || SitWith:attractiontoplayer > 10]
+                                        "<SitWith.name> smiles at me ..."
+                                        SitWith:arousal += Random(0, 1.5)
+                                    Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 0 && [SitWith:intoxication > 80 || SitWith:attractiontoplayer > 50]
+                                        "<SitWith.name> opens slightly <SitWith.his_or_her> lips and is softly grabbing my hair ..."
+                                        SitWith:arousal += Random(0, 7.5)
+                                        TryToKiss = true
+                                    Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 0 && [SitWith:intoxication > 60 || SitWith:attractiontoplayer > 50]
+                                        "<SitWith.name> looks deep into my eyes and strokes softly over my lips ..."
+                                        SitWith:arousal += Random(0, 5.5)
+                                    Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 0 && [SitWith:intoxication > 40 || SitWith:attractiontoplayer > 40]
+                                        "<SitWith.name> comes closer to me ..."
+                                        SitWith:arousal += Random(0, 4.5)
+                                    Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 0 && [SitWith:intoxication > 30 || SitWith:attractiontoplayer > 30]
+                                        "<SitWith.name> looks deep into my eyes ... and touches inadvertently softly over my crotch ..."
+                                        SitWith:arousal += Random(0, 3.5)
+                                    Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && [SitWith:intoxication > 20 || SitWith:attractiontoplayer > 20]
+                                        "<SitWith.name> touches my thigh ..."
+                                        SitWith:arousal += Random(0, 2.5)
+                                    Elseif !impressed && !SitWith.hadSex() && SitWith:masochist < -20
+                                        SitWith(Happy):: "Why are you looking at me like this? Is something wrong?"
+                                    Else
+                                        "<SitWith.name> simply looks at me ..."
+                                    Endif
+                                Endif
+                                
+                                If SitWith.isRelative() && isModEnabled(vin_Incest) && !SitWith.isDating() && !SitWith.isAffair() && !SitWith.isProstitute()
+                                    If impressed && SitWith:masochist > 0 && Flirts > 3 && [SitWith:intoxication > 90 || SitWith:incest > 50]
+                                        "My <SitWith.relationship> opens slightly <SitWith.his_or_her> lips and is softly touching my neck ..."
+                                        SitWith:arousal += Random(0, 5.5)
+                                    Elseif impressed && SitWith:masochist > 0 && Flirts > 2 && [SitWith:intoxication > 70 || SitWith:incest > 50]
+                                        "My <SitWith.relationship> looks deep into my eyes and opens slightly <SitWith.his_or_her> lips ..."
+                                        SitWith:arousal += Random(0, 4.5)
+                                    Elseif impressed && SitWith:masochist > 0 && Flirts > 1 && [SitWith:intoxication > 50 || SitWith:incest > 50]
+                                        "My <SitWith.relationship> looks deep into my eyes and smiles at me ..."
+                                        SitWith:arousal += Random(0, 3.5)
+                                    Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [SitWith:intoxication > 30 || SitWith:incest > 30]
+                                        "My <SitWith.relationship> looks deep into my eyes ..."
+                                        SitWith:arousal += Random(0, 2.5)
+                                    Elseif impressed && SitWith:masochist > 0 && [SitWith:intoxication > 30 || SitWith:incest > 20]
+                                        "My <SitWith.relationship> smiles at me ..."
+                                        SitWith:arousal += Random(0, 1.5)
+                                    Elseif impressed && SitWith:masochist < 0 && Flirts > 3 && SitWith:masochist > masochist && [SitWith:intoxication > 90 || SitWith:incest > 50]
+                                        "My <SitWith.relationship> opens slightly <SitWith.his_or_her> lips and is softly grabbing my hair ..."
+                                        SitWith:arousal += Random(0, 7.5)
+                                    Elseif impressed && SitWith:masochist < 0 && Flirts > 2 && SitWith:masochist > masochist && [SitWith:intoxication > 70 || SitWith:incest > 50]
+                                        "My <SitWith.relationship> looks deep into my eyes and strokes softly over my lips ..."
+                                        SitWith:arousal += Random(0, 5.5)
+                                    Elseif impressed && SitWith:masochist < 0 && Flirts > 2 && SitWith:masochist > masochist && [SitWith:intoxication > 50 || SitWith:incest > 50]
+                                        "My <SitWith.relationship> comes closer to me ..."
+                                        SitWith:arousal += Random(0, 4.5)
+                                    Elseif impressed && SitWith:masochist < 0 && Flirts > 1 && SitWith:masochist > masochist && [SitWith:intoxication > 30 || SitWith:incest > 30]
+                                        "My <SitWith.relationship> looks deep into my eyes ... and touches inadvertently softly over my crotch ..."
+                                        SitWith:arousal += Random(0, 3.5)
+                                    Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && [SitWith:intoxication > 30 || SitWith:incest > 20]
+                                        "My <SitWith.relationship> touches my thigh ..."
+                                        SitWith:arousal += Random(0, 2.5)
+                                    Elseif !impressed && !SitWith.hadSex() && SitWith:masochist < -20 && Random(0, 20) > SitWith:incest
+                                        SitWith(Happy):: "Why are you looking at me like this? Is something wrong?"
+                                    Else
+                                        "My <SitWith.relationship> simply looks at me ..."
+                                    Endif
+                                Endif
+                                
+                                If SitWith.hasRelationship(Dating, Spouses) && !SitWith.isDating() && !SitWith.isAffair() && !SitWith.isProstitute() && !SitWith.isRelative()
+                                    If impressed && SitWith:masochist > 0 && Flirts > 2 && [SitWith:intoxication > 90 || SitWith:attractiontoplayer > 60]
+                                        "<SitWith.name> opens slightly <SitWith.his_or_her> lips and is softly touching my neck ..."
+                                        SitWith:arousal += Random(0, 5.5)
+                                    Elseif impressed && SitWith:masochist > 0 && Flirts > 1 && [SitWith:intoxication > 70 || SitWith:attractiontoplayer > 60]
+                                        "<SitWith.name> looks deep into my eyes and opens slightly <SitWith.his_or_her> lips ..."
+                                        SitWith:arousal += Random(0, 4.5)
+                                    Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [SitWith:intoxication > 50 || SitWith:attractiontoplayer > 50]
+                                        "<SitWith.name> looks deep into my eyes and smiles at me ..."
+                                        SitWith:arousal += Random(0, 3.5)
+                                    Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [SitWith:intoxication > 30 || SitWith:attractiontoplayer > 30]
+                                        "<SitWith.name> looks deep into my eyes ..."
+                                        SitWith:arousal += Random(0, 2.5)
+                                    Elseif impressed && SitWith:masochist > 0 && [SitWith:intoxication > 30 || SitWith:attractiontoplayer > 20]
+                                        "<SitWith.name> smiles at me ..."
+                                        SitWith:arousal += Random(0, 1.5)
+                                    Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 2 && [SitWith:intoxication > 90 || SitWith:attractiontoplayer > 60]
+                                        "<SitWith.name> opens slightly <SitWith.his_or_her> lips and is softly grabbing my hair ..."
+                                        SitWith:arousal += Random(0, 7.5)
+                                        SitWith(Anxious):: "I wish I weren't taken already ..."
+                                        If Aphrodisiac
+                                            TryToKiss = true
+                                        Endif
+                                    Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 1 && [SitWith:intoxication > 70 || SitWith:attractiontoplayer > 60]
+                                        "<SitWith.name> looks deep into my eyes and strokes softly over my lips ..."
+                                        SitWith:arousal += Random(0, 5.5)
+                                    Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 1 && [SitWith:intoxication > 50 || SitWith:attractiontoplayer > 50]
+                                        "<SitWith.name> comes closer to me ..."
+                                        SitWith:arousal += Random(0, 4.5)
+                                    Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 1 && [SitWith:intoxication > 30 || SitWith:attractiontoplayer > 30]
+                                        "<SitWith.name> looks deep into my eyes ... and touches inadvertently softly over my crotch ..."
+                                        SitWith:arousal += Random(0, 3.5)
+                                    Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && [SitWith:intoxication > 30 || SitWith:attractiontoplayer > 20]
+                                        "<SitWith.name> touches my thigh ..."
+                                        SitWith:arousal += Random(0, 2.5)
+                                    Elseif !impressed && !SitWith.hadSex() && SitWith:masochist < 0
+                                        SitWith(Happy):: "Why are you looking at me like this? Is something wrong?"
+                                    Else
+                                        "<SitWith.name> simply looks at me ..."
+                                    Endif
+                                Endif
+                                
+                                Compliment = true
+                            Endif
+                            
+                            passTime(0.05, 0.1)
+                        Elseif 4
+                            flirting = true
+                            while flirting && PartyOngoing
+                                0:: !hadSex:: "Flirt subtly"
+                                1:: !hadSex:: "Flirt blatantly"
+                                2:: !hadSex:: "Touch <SitWith.his_or_her> thigh"
+                                3:: !hadSex:: "Wrap your arm around <SitWith.him_or_her>"
+                                4:: "Back"
+                                
+                                If 4
+                                    flirting = false
+                                Elseif Flirts*10 > SitWith:intoxication
+                                    "I think that's enough flirting for now. Even if <SitWith.he_or_she>'s receptive to it, it must start to get pretty tiring for <SitWith.him_or_her> by now."
+                                    impressed = false
+                                Else
+                                    impressed = false
+                                    If SitWith:masochist > 0 && [SitWith.isDating() || SitWith.isAffair() || SitWith.isProstitute()]
+                                        "<SitWith.name> seems receptive to my advances."
+                                        SitWith:attractiontoplayer += Random(0, 0.25)
+                                        impressed = true
+                                    Elseif !SitWith.isRelative() && SitWith.isInterestedIn(Player) && Random(0, 100)*(choice+2) < SitWith:perversion + SitWith:attractiontoplayer + interpersonal
+                                        "<SitWith.name> seems receptive to my advances."
+                                        SitWith:attractiontoplayer += Random(0, 0.25)
+                                        impressed = true
+                                    Elseif SitWith.isRelative() && SitWith.isInterestedIn(Player) && Random(0, 100)*(choice+2) < SitWith:perversion + SitWith:incest + interpersonal
+                                        "<SitWith.name> seems receptive to my advances."
+                                        SitWith:incest += Random(0, 0.25)
+                                        impressed = true
+                                    Else
+                                        "My flirting fails to impress <SitWith.name>."
+                                        SitWith:attractiontoplayer -= Random(0, 0.25)
+                                        impressed = false
+                                    Endif
+                                    
+                                    If [SitWith.isDating() || SitWith.isAffair() || SitWith.isProstitute()]
+                                        If impressed && SitWith:masochist > 0 && Flirts > 0 && [SitWith:intoxication > 50 || SitWith:attractiontoplayer > 30]
+                                            "<SitWith.name> opens slightly <SitWith.his_or_her> lips and is softly touching my neck ..."
+                                            SitWith:arousal += Random(0, 5.5)
+                                        Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [SitWith:intoxication > 40 || SitWith:attractiontoplayer > 30]
+                                            "<SitWith.name> looks deep into my eyes and opens slightly <SitWith.his_or_her> lips ..."
+                                            SitWith:arousal += Random(0, 4.5)
+                                        Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [SitWith:intoxication > 30 || SitWith:attractiontoplayer > 30]
+                                            "<SitWith.name> looks deep into my eyes and smiles at me ..."
+                                            SitWith:arousal += Random(0, 3.5)
+                                        Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [SitWith:intoxication > 20 || SitWith:attractiontoplayer > 20]
+                                            "<SitWith.name> looks deep into my eyes ..."
+                                            SitWith:arousal += Random(0, 2.5)
+                                        Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [SitWith:intoxication > 10 || SitWith:attractiontoplayer > 10]
+                                            "<SitWith.name> smiles at me ..."
+                                            SitWith:arousal += Random(0, 1.5)
+                                        Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 0 && [SitWith:intoxication > 50 || SitWith:attractiontoplayer > 30]
+                                            "<SitWith.name> opens slightly <SitWith.his_or_her> lips and is softly grabbing my hair ..."
+                                            SitWith:arousal += Random(0, 7.5)
+                                            TryToKiss = true
+                                        Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 0 && [SitWith:intoxication > 40 || SitWith:attractiontoplayer > 30]
+                                            "<SitWith.name> looks deep into my eyes and strokes softly over my lips ..."
+                                            SitWith:arousal += Random(0, 5.5)
+                                        Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 0 && [SitWith:intoxication > 30 || SitWith:attractiontoplayer > 30]
+                                            "<SitWith.name> comes closer to me ..."
+                                            SitWith:arousal += Random(0, 4.5)
+                                        Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 0 && [SitWith:intoxication > 20 || SitWith:attractiontoplayer > 20]
+                                            "<SitWith.name> looks deep into my eyes ... and touches inadvertently softly over my crotch ..."
+                                            SitWith:arousal += Random(0, 3.5)
+                                        Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 0 && [SitWith:intoxication > 10 || SitWith:attractiontoplayer > 10]
+                                            "<SitWith.name> touches my thigh ..."
+                                            SitWith:arousal += Random(0, 2.5)
+                                        Elseif !impressed && SitWith:masochist < -20
+                                            SitWith(Happy):: "Why are you looking at me like this? Is something wrong?"
+                                        Else
+                                            "<SitWith.name> simply looks at me ..."
+                                        Endif
+                                    Endif
+                                
+                                    If !SitWith.hasRelationship(Dating, Spouses) && !SitWith.isDating() && !SitWith.isAffair() && !SitWith.isProstitute() && !SitWith.isRelative()
+                                        If impressed && Aphrodisiac
+                                            "<SitWith.name> opens slightly <SitWith.his_or_her> lips and is softly grabbing my hair ..."
+                                            SitWith:arousal += Random(0, 7.5)
+                                            TryToKiss = true
+                                        Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [[SitWith:intoxication > 80 && SitWith:perversion > Random(65,85)] || SitWith:attractiontoplayer > 50]
+                                            "<SitWith.name> opens slightly <SitWith.his_or_her> lips and is softly touching my neck ..."
+                                            SitWith:arousal += Random(0, 5.5)
+                                        Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [[SitWith:intoxication > 60 && SitWith:perversion > Random(65,85)] || SitWith:attractiontoplayer > 50]
+                                            "<SitWith.name> looks deep into my eyes and opens slightly <SitWith.his_or_her> lips ..."
+                                            SitWith:arousal += Random(0, 4.5)
+                                        Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [[SitWith:intoxication > 40 && SitWith:perversion > Random(65,85)] || SitWith:attractiontoplayer > 40]
+                                            "<SitWith.name> looks deep into my eyes and smiles at me ..."
+                                            SitWith:arousal += Random(0, 3.5)
+                                        Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [[SitWith:intoxication > 30 && SitWith:perversion > Random(65,85)] || SitWith:attractiontoplayer > 30]
+                                            "<SitWith.name> looks deep into my eyes ..."
+                                            SitWith:arousal += Random(0, 2.5)
+                                        Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [[SitWith:intoxication > 20 && SitWith:perversion > Random(65,85)] || SitWith:attractiontoplayer > 10]
+                                            "<SitWith.name> smiles at me ..."
+                                            SitWith:arousal += Random(0, 1.5)
+                                        Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 0 && [[SitWith:intoxication > 80 && SitWith:perversion > Random(45,85)] || SitWith:attractiontoplayer > 50]
+                                            "<SitWith.name> opens slightly <SitWith.his_or_her> lips and is softly grabbing my hair ..."
+                                            SitWith:arousal += Random(0, 7.5)
+                                            TryToKiss = true
+                                        Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 0 && [[SitWith:intoxication > 60 && SitWith:perversion > Random(45,85)] || SitWith:attractiontoplayer > 50]
+                                            "<SitWith.name> looks deep into my eyes and strokes softly over my lips ..."
+                                            SitWith:arousal += Random(0, 5.5)
+                                        Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 0 && [[SitWith:intoxication > 40 && SitWith:perversion > Random(45,85)] || SitWith:attractiontoplayer > 40]
+                                            "<SitWith.name> comes closer to me ..."
+                                            SitWith:arousal += Random(0, 4.5)
+                                        Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 0 && [[SitWith:intoxication > 30 && SitWith:perversion > Random(45,85)] || SitWith:attractiontoplayer > 30]
+                                            "<SitWith.name> looks deep into my eyes ... and touches inadvertently softly over my crotch ..."
+                                            SitWith:arousal += Random(0, 3.5)
+                                        Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 0 && [[SitWith:intoxication > 20 && SitWith:perversion > Random(45,85)] || SitWith:attractiontoplayer > 20]
+                                            "<SitWith.name> touches my thigh ..."
+                                            SitWith:arousal += Random(0, 2.5)
+                                        Elseif !impressed && !SitWith.hadSex() && SitWith:masochist < -20
+                                            SitWith(Happy):: "Why are you looking at me like this? Is something wrong?"
+                                        Else
+                                            "<SitWith.name> simply looks at me ..."
+                                        Endif
+                                    Endif
+                                    
+                                    If SitWith.isRelative() && isModEnabled(vin_Incest) && !SitWith.isDating() && !SitWith.isAffair() && !SitWith.isProstitute()
+                                        If impressed && Aphrodisiac
+                                            "My <SitWith.relationship> opens slightly <SitWith.his_or_her> lips and is softly grabbing my hair ..."
+                                            SitWith:arousal += Random(0, 7.5)
+                                            TryToKiss = true
+                                        Elseif impressed && SitWith:masochist > 0 && Flirts > 3 && [SitWith:intoxication > 90 && SitWith:incest > 50]
+                                            "My <SitWith.relationship> opens slightly <SitWith.his_or_her> lips and is softly touching my neck ..."
+                                            SitWith:arousal += Random(0, 5.5)
+                                        Elseif impressed && SitWith:masochist > 0 && Flirts > 2 && [SitWith:intoxication > 70 && SitWith:incest > 50]
+                                            "My <SitWith.relationship> looks deep into my eyes and opens slightly <SitWith.his_or_her> lips ..."
+                                            SitWith:arousal += Random(0, 4.5)
+                                        Elseif impressed && SitWith:masochist > 0 && Flirts > 1 && [SitWith:intoxication > 50 && SitWith:incest > 50]
+                                            "My <SitWith.relationship> looks deep into my eyes and smiles at me ..."
+                                            SitWith:arousal += Random(0, 3.5)
+                                        Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [SitWith:intoxication > 50 && SitWith:incest > 30]
+                                            "My <SitWith.relationship> looks deep into my eyes ..."
+                                            SitWith:arousal += Random(0, 2.5)
+                                        Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [SitWith:intoxication > 50 && SitWith:incest > 20]
+                                            "My <SitWith.relationship> smiles at me ..."
+                                            SitWith:arousal += Random(0, 1.5)
+                                        Elseif impressed && SitWith:masochist < 0 && Flirts > 3 && SitWith:masochist > masochist && [SitWith:intoxication > 90 && SitWith:incest > 50]
+                                            "My <SitWith.relationship> opens slightly <SitWith.his_or_her> lips and is softly grabbing my hair ..."
+                                            SitWith:arousal += Random(0, 7.5)
+                                        Elseif impressed && SitWith:masochist < 0 && Flirts > 2 && SitWith:masochist > masochist && [SitWith:intoxication > 70 && SitWith:incest > 50]
+                                            "My <SitWith.relationship> looks deep into my eyes and strokes softly over my lips ..."
+                                            SitWith:arousal += Random(0, 5.5)
+                                        Elseif impressed && SitWith:masochist < 0 && Flirts > 2 && SitWith:masochist > masochist && [SitWith:intoxication > 50 && SitWith:incest > 50]
+                                            "My <SitWith.relationship> comes closer to me ..."
+                                            SitWith:arousal += Random(0, 4.5)
+                                        Elseif impressed && SitWith:masochist < 0 && Flirts > 1 && SitWith:masochist > masochist && [SitWith:intoxication > 50 && SitWith:incest > 30]
+                                            "My <SitWith.relationship> looks deep into my eyes ... and touches inadvertently softly over my crotch ..."
+                                            SitWith:arousal += Random(0, 3.5)
+                                        Elseif impressed && SitWith:masochist < 0 && Flirts > 1 && SitWith:masochist > masochist && [SitWith:intoxication > 50 && SitWith:incest > 20]
+                                            "My <SitWith.relationship> touches my thigh ..."
+                                            SitWith:arousal += Random(0, 2.5)
+                                        Elseif !impressed && !SitWith.hadSex() && SitWith:masochist < -20 && Random(0, 20) > SitWith:incest
+                                            SitWith(Happy):: "Why are you looking at me like this? Is something wrong?"
+                                        Else
+                                            "My <SitWith.relationship> simply looks at me ..."
+                                        Endif
+                                    Endif
+                                    
+                                    If SitWith.hasRelationship(Dating, Spouses) && !SitWith.isDating() && !SitWith.isAffair() && !SitWith.isProstitute() && !SitWith.isRelative()
+                                        If impressed && Aphrodisiac
+                                            "<SitWith.name> opens slightly <SitWith.his_or_her> lips and is softly grabbing my hair ..."
+                                            SitWith:arousal += Random(0, 7.5)
+                                            SitWith(Anxious):: "I wish I weren't taken already ..."
+                                            TryToKiss = true
+                                        Elseif impressed && SitWith:masochist > 0 && Flirts > 2 && [SitWith:attractiontoplayer > 60 || [SitWith:intoxication > 90 && SitWith:perversion > Random(65,85)]]
+                                            "<SitWith.name> opens slightly <SitWith.his_or_her> lips and is softly touching my neck ..."
+                                            SitWith:arousal += Random(0, 5.5)
+                                        Elseif impressed && SitWith:masochist > 0 && Flirts > 1 && [SitWith:attractiontoplayer > 60 || [SitWith:intoxication > 70 && SitWith:perversion > Random(65,85)]]
+                                            "<SitWith.name> looks deep into my eyes and opens slightly <SitWith.his_or_her> lips ..."
+                                            SitWith:arousal += Random(0, 4.5)
+                                        Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [SitWith:attractiontoplayer > 50 || [SitWith:intoxication > 50 && SitWith:perversion > Random(65,85)]]
+                                            "<SitWith.name> looks deep into my eyes and smiles at me ..."
+                                            SitWith:arousal += Random(0, 3.5)
+                                        Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [SitWith:attractiontoplayer > 30 || [SitWith:intoxication > 30 && SitWith:perversion > Random(65,85)]]
+                                            "<SitWith.name> looks deep into my eyes ..."
+                                            SitWith:arousal += Random(0, 2.5)
+                                        Elseif impressed && SitWith:masochist > 0 && Flirts > 0 && [SitWith:attractiontoplayer > 20 || [SitWith:intoxication > 30 && SitWith:perversion > Random(65,85)]]
+                                            "<SitWith.name> smiles at me ..."
+                                            SitWith:arousal += Random(0, 1.5)
+                                        Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 2 && [SitWith:attractiontoplayer > 60 || [SitWith:intoxication > 90 && SitWith:perversion > Random(45,85)]]
+                                            "<SitWith.name> opens slightly <SitWith.his_or_her> lips and is softly grabbing my hair ..."
+                                            SitWith:arousal += Random(0, 7.5)
+                                            SitWith(Anxious):: "I wish I weren't taken already ..."
+                                        Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 1 && [SitWith:attractiontoplayer > 60 || [SitWith:intoxication > 70 && SitWith:perversion > Random(45,85)]]
+                                            "<SitWith.name> looks deep into my eyes and strokes softly over my lips ..."
+                                            SitWith:arousal += Random(0, 5.5)
+                                        Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 1 && [SitWith:attractiontoplayer > 50 || [SitWith:intoxication > 50 && SitWith:perversion > Random(45,85)]]
+                                            "<SitWith.name> comes closer to me ..."
+                                            SitWith:arousal += Random(0, 4.5)
+                                        Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 1 && [SitWith:attractiontoplayer > 30 || [SitWith:intoxication > 30 && SitWith:perversion > Random(45,85)]]
+                                            "<SitWith.name> looks deep into my eyes ... and touches inadvertently softly over my crotch ..."
+                                            SitWith:arousal += Random(0, 3.5)
+                                        Elseif impressed && SitWith:masochist < 0 && SitWith:masochist > masochist && Flirts > 0 && [SitWith:attractiontoplayer > 20 || [SitWith:intoxication > 30 && SitWith:perversion > Random(45,85)]]
+                                            "<SitWith.name> touches my thigh ..."
+                                            SitWith:arousal += Random(0, 2.5)
+                                        Elseif !impressed && !SitWith.hadSex() && SitWith:masochist < 0
+                                            SitWith(Happy):: "Why are you looking at me like this? Is something wrong?"
+                                        Else
+                                            "<SitWith.name> simply looks at me ..."
+                                        Endif
+                                    Endif
+                                    
+                                    Flirts += 1
+                                Endif
+                                
+                                impressed = false
+                                passTime(0.1, 0.3)
+                            endWhile
+                        Elseif 7
+                            KissBack = false
+                            If SitWith.isProstitute() && isModEnabled(sb_PimpYourGirl) && !SitWith.isDating() && !SitWith.isAffair()
+                                "<SitWith.he_or_she> is my prostitute, but I think I should make my move now and kiss <SitWith.him_or_her>."
+                            Endif
+                            
+                            If SitWith.isRelative() && isModEnabled(vin_Incest) && !SitWith.hadSex()
+                                "I know it's wrong. <SitWith.he_or_she> is my <SitWith.relationship>, but I think I should make my move now and kiss <SitWith.him_or_her>."
+                            Endif
+                            
+                            Player(Kiss):: "..."
+                            If Aphrodisiac
+                                SitWith(Kiss):: "..."
+                                If !SitWith.isInterestedIn(Player)
+                                    "I usually don't like <Player.men_or_women> at all, but there's something about you ... I can't help myself ..."
+                                Endif
+                                KissBack = true
+                            Elseif !SitWith.hasRelationship(Dating, Spouses) && [SitWith.isDating() || SitWith.isAffair()]
+                                SitWith(Kiss):: "..."
+                                KissBack = true
+                            Elseif !SitWith.isRelative() && !SitWith.hasRelationship(Dating, Spouses) && SitWith.isInterestedIn(Player) && [[SitWith:intoxication > Random(85, 100) && SitWith:arousal > Random(50,85)] || [SitWith:intoxication > Random(85, 100) && SitWith:perversion > Random(50,85)] || [SitWith:attractiontoplayer > Random(45, 90) && SitWith:perversion > Random(25, 75)]]
+                                SitWith(Kiss):: "..."
+                                If SitWith.isProstitute() && isModEnabled(sb_PimpYourGirl)
+                                    "<SitWith.name> kissed me back. In fact, <SitWith.he_or_she> certainly showed that <SitWith.he_or_she> wanted something more ..."
+                                Else
+                                    "<SitWith.name> was totally receptive to my advance. In fact, <SitWith.he_or_she> certainly showed that <SitWith.he_or_she> wanted something more ..."
+                                Endif
+                                KissBack = true
+                            Elseif SitWith.isRelative() && isModEnabled(vin_Incest) && !SitWith.hasRelationship(Dating, Spouses) && SitWith.isInterestedIn(Player) && [SitWith:intoxication > Random(50, 100) && SitWith:incest > Random(35, 100) && SitWith:perversion > Random(35, 100)]
+                                SitWith(Kiss):: "..."
+                                "Wow, that's quite a pleasant surprise. My <SitWith.relationship> was totally receptive to my advance. In fact, <SitWith.he_or_she> certainly showed that <SitWith.he_or_she> wanted something more ..."
+                                KissBack = true
+                            Elseif !SitWith.isInterestedIn(Player) && !SitWith.isDating() && !SitWith.isAffair() && !SitWith.isRelative() && [SitWith:masochist < 0 || PartyType == 7]
+                                If PartyType != 7
+                                    SitWith(Angry):: "..."
+                                    If SitWith.isMale()
+                                        "BLOW!"
+                                        "<SitWith.name> punched me in the face ..."
+                                    Else
+                                        "SMACK!"
+                                        "<SitWith.name> slapped me in the face ..."
+                                    Endif
+                                    Player(Shocked):: "Ouch! WTF?"
+                                    SitWith(Angry):: "Try that again and you'll get another one, pervert!"
+                                    SitWith:attractiontoplayer -= Random(25,50)
+                                    SitWith:rapportwithplayer -= Random(5,25)
+                                    energy -= 10
+                                    passTime(0.1, 0.3)
+                                    KissBack = false
+                                    PartySitting = false
+                                Else
+                                    If SitWith.isMale() || WeirdJerkOff
+                                        SitWith():: "Sorry, I'm not into you."
+                                    Else
+                                        WeirdJerkOff = true
+                                        SitWith():: "Please, stop that ... I'm not into you. But if you want you can jerk off to me, I don't mind."
+                                        0:: "Jerk off to <SitWith.him_or_her>"
+                                        1:: "No, maybe not"
+                                        
+                                        If 0
+                                            SitWith.strip()
+                                            "She casually spreads her legs for you that you can see everything. Eagerly you start jerking off."
+                                            "While you are wanking your dick she starts talking to the other guests on the side."
+                                            "After a while she turns to you again."
+                                            SitWith():: "Is it okay for you? If you'd rather see my ass I can turn around for you."
+                                            0:: "Please turn around"
+                                            1:: "No, that's fine"
+                                            2:: "Stop"
+                                            
+                                            If 0
+                                                "She turns around and points her ass at you, just like that. Like it's the most ordinary thing in the world."
+                                                If masochist > 0 && SitWith:masochist < -50
+                                                    SitWith():: "If you want you can lick my butthole, it's okay. But please, don't touch my pussy."
+                                                    0:: "Lick her butthole"
+                                                    1:: "Just enjoy the view"
+                                                    
+                                                    If 0
+                                                        "You're happy about the offer and you greedily bury your tongue deep in her ass."
+                                                        "She doesn't even react to it ..."
+                                                        masochist += Random(2,4)
+                                                    Endif
+                                                Endif
+                                            Endif
+                                            
+                                            If choice != 2
+                                                SitWith():: "If you want, you can cum on me, I don't care. But please, not on my face."
+                                                "Then she turns to the host and talks about her last movie, ignoring you."
+                                                0:: "Cum on her tits"
+                                                1:: "Cum on her ass"
+                                                2:: "Cum on her legs"
+                                                3:: "Cum on her feet"
+                                                4:: "Cum on the floor"
+                                                5:: "Stop jerking"
+                                                
+                                                If 2 || 3
+                                                    masochist += Random(0,1)
+                                                Endif
+                                                
+                                                If 4 || 5
+                                                    masochist += Random(2,4)
+                                                Endif
+                                                
+                                                If choice != 5 && 
+                                                    "You squirt with a loud groan. She turns to you and smiles ..."
+                                                    If choice != 4
+                                                        "As soon as you're done, she takes her hand and just wipes it away."
+                                                    Endif
+                                                    0:: "Thank her"
+                                                    1:: "Say nothing"
+                                                    
+                                                    If 0
+                                                        Player(Flirty):: "Thank you very much."
+                                                        SitWith():: "My pleasure ... let me know if you want to book me for a movie."
+                                                        masochist += Random(0,1)
+                                                    Endif
+                                                Endif
+                                            Endif
+                                        Endif
+                                    Endif
+                                    energy -= 10
+                                    passTime(0.1, 0.3)
+                                    KissBack = false
+                                Endif
+                            Elseif !SitWith.isRelative() && SitWith.hasRelationship(Dating, Spouses) && SitWith.isInterestedIn(Player) && [SitWith:intoxication > Random(90, 100) && SitWith:perversion > Random(50,85) && SitWith:attractiontoplayer > Random(45, 90)]
+                                SitWith(Kiss):: "..."
+                                If SitWith.isProstitute() && isModEnabled(sb_PimpYourGirl)
+                                    "My prostitute was totally receptive to my advance. In fact, <SitWith.he_or_she> certainly showed that <SitWith.he_or_she> wanted something more ..."
+                                Else
+                                    "Wow, that's quite a pleasant surprise. <SitWith.name> was totally receptive to my advance. In fact, <SitWith.he_or_she> certainly showed that <SitWith.he_or_she> wanted something more ..."
+                                Endif
+                                KissBack = true
+                            Else
+                                If SitWith.isInterestedIn(Player) && [SitWith:attractiontoplayer > 50 || SitWith:incest > 50]
+                                    "<SitWith.He_or_She> kisses you back, but only very hesitantly.... somehow it seems to be unpleasant for <SitWith.him_or_her>. Then suddenly <SitWith.he_or_she> pulled away from my advances .."
+                                Else
+                                    "<SitWith.name> pulled away from my advances ..."
+                                Endif
+                                SitWith:attractiontoplayer -= Random(0,1)
+                                SitWith:rapportwithplayer -= Random(0,2)
+                                KissBack = false
+                            Endif
+                            passTime(0.1, 0.3)
+                        Elseif 9
+                            PartySitting = false
+                        Endif
+                        
+                        // Try to kiss
+                        If TryToKiss || [!KissBack && !hadSex && SitWith.isProstitute() && !isModEnabled(sb_PimpYourGirl)] || [!KissBack && !hadSex && SitWith.IsInterestedIn(Player) && Player.IsInterestedIn(SitWith) && Random(200,300) < SitWith:intoxication+SitWith:arousal+SitWith:attractiontoplayer && !SitWith.isRelative() && !SitWith.hasRelationship(Dating, Spouses)]
+                            KissBack = false
+                            If [TryToKiss || [SitWith.IsDominantSex(Player) && SitWith:perversion + SitWith:attractiontoplayer > Random(0, 200)]] && !SitWith.isRelative()
+                                "All of a sudden, <SitWith.name> grabbed me and leaned in for a kiss"
+                                SitWith(Kiss):: "..."
+                                0:: "Kiss back"
+                                1:: "Turn <SitWith.him_or_her> down"
+                                
+                                If 0
+                                    KissBack = true
+                                Else
+                                    "I pulled myself away from <SitWith.him_or_her>. <SitWith.He_or_She> was visibly embarassed."
+                                    SitWith:attractiontoplayer -= Random(0, 1)
+                                Endif
+                            Endif
+                            passTime(0.05, 0.1)
+                        Endif
+                        
+                        If  [KissBack && SitWith.isDating()] || [KissBack && SitWith.isAffair()] || [KissBack && [!SitWith.isProstitute() || Aphrodisiac] && !SitWith.isRelative()] || [KissBack && SitWith.isProstitute() && isModEnabled(sb_PimpYourGirl) && !SitWith.isRelative()]
+                            Player(Kiss):: "..."
+                            If SitWith.isProstitute() && isModEnabled(sb_PimpYourGirl)
+                                "It seems that my prostitute is really into me, we indulged ourselves in a passionate kiss."
+                            Else
+                                "I responded in kind and we indulged ourselves in a passionate kiss."
+                            Endif
+                            SitWith:attractiontoplayer += Random(0, 1)
+                            0:: [PlayerHosting || SitWith.IsSameAs(Host) || IsModEnabled(vin_VanillaPorn)]:: "Have sex right here"
+                            1:: !PlayerHosting && !SitWith.IsSameAs(Host) && !PartyType == 7:: "Invite <SitWith.him_or_her> home"
+                            2:: "Stop it there"
+                            
+                            If 0 
+                                "I needed to feel <SitWith.him_or_her> right here, right now."
+                                If PartyType == 4
+                                    setBackgroundCustom(sb_office_bathroom)
+                                    "We dragged each other to the restroom and started making out intensely."
+                                Else
+                                    setBackground(home)
+                                    "We dragged each other to the bedroom and started making out intensely."
+                                Endif
+                                perversion += Random(0, 0.2)
+                                SitWith.show(4)
+                                Player.show(0)
+                                SitWith.strip()
+                                Player.strip()
+                                "Things were escalating quickly ..."
+                                If Random(0,200) > SitWith:sneak+Player:sneak && !SitWith.isRelative()
+                                    CatchCount = 0
+                                    InRoomGuest1 = false
+                                    InRoomGuest2 = false
+                                    InRoomGuest3 = false
+                                    InRoomGuest4 = false
+                                    InRoomGuest5 = false
+                                    If Guest1:sneak > SitWith:sneak && !Guest1.isRelative() && !Guest1.isSameAs(SitWith) && Guest1:intoxication > Random(50,100) && CatchCount < 3 && [Guest1:perversion > Random(0,75) || Guest1.isDating()]
+                                        CatchCount += 1
+                                        Guest1.show(1)
+                                        InRoomGuest1 = true
+                                    Endif
+                                    If Guest2:sneak > SitWith:sneak && !Guest1.isRelative() && !Guest2.isSameAs(SitWith) && Guest2:intoxication > Random(50,100) && CatchCount < 3 && [Guest2:perversion > Random(0,75) || Guest1.isDating()]
+                                        CatchCount += 1
+                                        Guest2.show(2)
+                                        InRoomGuest2 = true
+                                    Endif
+                                    If Guest3:sneak > SitWith:sneak && !Guest1.isRelative() && !Guest3.isSameAs(SitWith) && Guest3:intoxication > Random(50,100) && CatchCount < 3 && [Guest3:perversion > Random(0,75) || Guest1.isDating()]
+                                        CatchCount += 1
+                                        Guest3.show(3)
+                                        InRoomGuest3 = true
+                                    Endif
+                                    If Guest4:sneak > SitWith:sneak && !Guest1.isRelative() && !Guest4.isSameAs(SitWith) && Guest4:intoxication > Random(50,100) && CatchCount < 3 && [Guest4:perversion > Random(0,75) || Guest1.isDating()]
+                                        CatchCount += 1
+                                        Guest4.show(5)
+                                        InRoomGuest4 = true
+                                    Elseif Guest5:sneak > SitWith:sneak && !Guest1.isRelative() && !Guest5.isSameAs(SitWith) && Guest5:intoxication > Random(50,100) && CatchCount < 3 && [Guest5:perversion > Random(0,75) || Guest1.isDating()]
+                                        CatchCount += 1
+                                        Guest5.show(5)
+                                        InRoomGuest5 = true
+                                    Endif
+                                    If CatchCount > 0
+                                        "Suddenly you realize that you are not alone in the room ..."
+                                        If !OpenRelationship() && [[Guest1.isDating() && InRoomGuest1] || [Guest2.isDating() && InRoomGuest2] || [Guest3.isDating() && InRoomGuest3] || [Guest4.isDating() && InRoomGuest4] || [Guest5.isDating() && InRoomGuest5]]
+                                            Dating = getSpecific(Dating)
+                                            Dating.show(1)
+                                            Dating(Angry):: "What you are doing you both here??!? ARGH!"
+                                            SitWith.passOn()
+                                            followUP(caught_cheating)
+                                            Breakup = true
+                                            PartyOngoing = false
+                                            PartySitting = false
+                                            KissBack = false
+                                            TryToKiss = false
+                                        Endif
+                                        
+                                        If InRoomGuest1 && !Breakup
+                                            Random
+                                                Guest1(Happy):: "HA! Look at this ... they want give us a show!"
+                                                Guest1(Happy):: "Hahahahaha! Look at this!"
+                                                Guest1(Happy):: "Oh, sorry ... I didn't know! Hahaha!"
+                                                Guest1(Happy):: "Look at this! ... And we were wondering where you both are!"
+                                                Guest1(Happy):: "Oh, so you both want to have fun without us..."
+                                                Guest1(Happy):: "Look at this!"
+                                            endRandom
+                                        Endif
+                                        If InRoomGuest2 && !Breakup
+                                            Random
+                                                Guest2(Happy):: "HA! Look at this ... they want give us a show!"
+                                                Guest2(Happy):: "Hahahahaha! Look at this!"
+                                                Guest2(Happy):: "Oh, sorry ... I didn't know! Hahaha!"
+                                                Guest2(Happy):: "Look at this! ... And we were wondering where you both are!"
+                                                Guest2(Happy):: "Oh, so you both want to have fun without us..."
+                                                Guest2(Happy):: "Look at this!"
+                                            endRandom
+                                        Endif
+                                        If InRoomGuest3 && !Breakup
+                                            Random
+                                                Guest3(Happy):: "HA! Look at this ... they want give us a show!"
+                                                Guest3(Happy):: "Hahahahaha! Look at this!"
+                                                Guest3(Happy):: "Oh, sorry ... I didn't know! Hahaha!"
+                                                Guest3(Happy):: "Look at this! ... And we were wondering where you both are!"
+                                                Guest3(Happy):: "Oh, so you both want to have fun without us..."
+                                                Guest3(Happy):: "Look at this!"
+                                            endRandom
+                                        Endif
+                                        If InRoomGuest4 && !Breakup
+                                            Random
+                                                Guest4(Happy):: "HA! Look at this ... they want give us a show!"
+                                                Guest4(Happy):: "Hahahahaha! Look at this!"
+                                                Guest4(Happy):: "Oh, sorry ... I didn't know! Hahaha!"
+                                                Guest4(Happy):: "Look at this! ... And we were wondering where you both are!"
+                                                Guest4(Happy):: "Oh, so you both want to have fun without us..."
+                                                Guest4(Happy):: "Look at this!"
+                                            endRandom
+                                        Endif
+                                        If InRoomGuest5 && !Breakup
+                                            Random
+                                                Guest5(Happy):: "HA! Look at this ... they want give us a show!"
+                                                Guest5(Happy):: "Hahahahaha! Look at this!"
+                                                Guest5(Happy):: "Oh, sorry ... I didn't know! Hahaha!"
+                                                Guest5(Happy):: "Look at this! ... And we were wondering where you both are!"
+                                                Guest5(Happy):: "Oh, so you both want to have fun without us..."
+                                                Guest5(Happy):: "Look at this!"
+                                            endRandom
+                                        Endif
+                                        If CatchCount == 1 && !Breakup
+                                            If InRoomGuest5
+                                                JoinedGuest = Guest5
+                                            Elseif InRoomGuest4
+                                                JoinedGuest = Guest4
+                                            Elseif InRoomGuest3
+                                                JoinedGuest = Guest3
+                                            Elseif InRoomGuest2
+                                                JoinedGuest = Guest2
+                                            Elseif InRoomGuest1
+                                                JoinedGuest = Guest1
+                                            Endif
+                                            
+                                            If [Random(200,300) < JoinedGuest:intoxication+JoinedGuest:arousal+JoinedGuest:attractiontoplayer && [JoinedGuest.isInterestedIn(Player) || JoinedGuest.isInterestedIn(SitWith)]] || [Aphrodisiac && AlcoholLevel > 150]
+                                                JoinedGuest(Happy):: "Mhhh ... do you mind if I join you?"
+                                                0:: "No, that's fine!"
+                                                1:: "WTF?! No!"
+                                                
+                                                If 0
+                                                    JoinedGuest.strip()
+                                                    If !Aphrodisiac && AlcoholLevel < 150
+                                                        Sex(SitWith, Player, JoinedGuest)
+                                                    Else
+                                                        SexNoAffair(SitWith, Player, JoinedGuest)
+                                                    Endif
+                                                    If !Aphrodisiac
+                                                        SitWith.dress()
+                                                        JoinedGuest.dress()
+                                                        Player.dress()
+                                                    Endif
+                                                    SitWith.show(2)
+                                                    SitWith:arousal -= 100
+                                                    JoinedGuest.show(1)
+                                                    JoinedGuest:arousal -= 100
+                                                    ProceedWithSex = false
+                                                Else
+                                                    JoinedGuest(Happy):: "Okay, then ... have fun!"
+                                                    ProceedWithSex = true
+                                                Endif
+                                            Else
+                                                JoinedGuest(Happy):: "I won't bother you any further ... Have fun!"
+                                                ProceedWithSex = true
+                                            Endif
+                                        Elseif CatchCount == 2 && !Breakup
+                                            If InRoomGuest5
+                                                JoinedGuest1 = Guest5
+                                            Elseif InRoomGuest4
+                                                JoinedGuest1 = Guest4
+                                            Elseif InRoomGuest3
+                                                JoinedGuest1 = Guest3
+                                            Elseif InRoomGuest2
+                                                JoinedGuest1 = Guest2
+                                            Elseif InRoomGuest1
+                                                JoinedGuest1 = Guest1
+                                            Endif
+                                            If InRoomGuest5 && !JoinedGuest1.isSameAs(Guest5)
+                                                JoinedGuest2 = Guest5
+                                            Elseif InRoomGuest4 && !JoinedGuest1.isSameAs(Guest4)
+                                                JoinedGuest2 = Guest4
+                                            Elseif InRoomGuest3 && !JoinedGuest1.isSameAs(Guest3)
+                                                JoinedGuest2 = Guest3
+                                            Elseif InRoomGuest2 && !JoinedGuest1.isSameAs(Guest2)
+                                                JoinedGuest2 = Guest2
+                                            Elseif InRoomGuest1 && !JoinedGuest1.isSameAs(Guest1)
+                                                JoinedGuest2 = Guest1
+                                            Endif
+                                            If [[Random(200,300) < JoinedGuest1:intoxication+JoinedGuest1:arousal+JoinedGuest1:attractiontoplayer && [JoinedGuest1.isInterestedIn(Player) || JoinedGuest1.isInterestedIn(SitWith)]] && [Random(200,300) < JoinedGuest2:intoxication+JoinedGuest2:arousal+JoinedGuest2:attractiontoplayer && [JoinedGuest2.isInterestedIn(Player) || JoinedGuest2.isInterestedIn(SitWith)]]] || [Aphrodisiac && AlcoholLevel > 150]
+                                                "<JoinedGuest1.name> and <JoinedGuest2.name> looked at each other ... <JoinedGuest1.name> touching <JoinedGuest2.name>'s arm ..."
+                                                If [JoinedGuest1.isSameGender(Player) && JoinedGuest2.isSameGender(Player)] || [JoinedGuest1.isSameGender(SitWith) && JoinedGuest2.isSameGender(SitWith)]
+                                                    JoinedGuest2(Happy):: "Do you mind if we join you?"
+                                                    0:: "No, that's fine!"
+                                                    1:: "WTF?! No!"
+                                                    
+                                                    If 0
+                                                        JoinedGuest1.strip()
+                                                        JoinedGuest2.strip()
+                                                        If !Aphrodisiac && AlcoholLevel < 150
+                                                            Sex(SitWith, Player, JoinedGuest1, JoinedGuest2)
+                                                        Else
+                                                            SexNoAffair(SitWith, Player, JoinedGuest1, JoinedGuest2)
+                                                        Endif
+                                                        If !Aphrodisiac
+                                                            SitWith.dress()
+                                                            JoinedGuest1.dress()
+                                                            JoinedGuest2.dress()
+                                                            Player.dress()
+                                                        Endif
+                                                        SitWith.show(2)
+                                                        SitWith:arousal -= 100
+                                                        JoinedGuest1.show(1)
+                                                        JoinedGuest1:arousal -= 100
+                                                        JoinedGuest2.show(2)
+                                                        JoinedGuest2:arousal -= 100
+                                                        ProceedWithSex = false
+                                                    Else
+                                                        JoinedGuest1(Happy):: "Then we won't bother you any further ... Have fun!"
+                                                        "<JoinedGuest1.name> pulled <JoinedGuest2.name> out of the room ..."
+                                                        "Then you carefully locked the door ..."
+                                                        SitWith(Happy):: "That was something ..."
+                                                        SitWith(Flirty):: "Well, where did we left off?"
+                                                        ProceedWithSex = true
+                                                    Endif
+                                                Else
+                                                    JoinedGuest2(Happy):: "Do you mind if we watch you?"
+                                                    0:: "No, that's fine!"
+                                                    1:: "WTF?! No!"
+                                                    
+                                                    If 0
+                                                        ProceedWithSex = true
+                                                    Else
+                                                        JoinedGuest1(Happy):: "Then we won't bother you any further ... Have fun!"
+                                                        "<JoinedGuest1.name> pulled <JoinedGuest2.name> out of the room ..."
+                                                        "Then you carefully locked the door ..."
+                                                        SitWith(Happy):: "That was something ..."
+                                                        SitWith(Flirty):: "Well, where did we left off?"
+                                                        ProceedWithSex = true
+                                                    Endif
+                                                Endif
+                                            Else
+                                                "After they had made some stupid comments, <JoinedGuest1.name> pulled <JoinedGuest2.name> out of the room ..."
+                                                "Then you carefully locked the door ..."
+                                                SitWith(Flirty):: "Well, where did we left off?"
+                                                ProceedWithSex = true
+                                            Endif
+                                        Elseif !Breakup
+                                            "After they had made some stupid comments, they all left the room ..."
+                                            "Then you carefully locked the door ..."
+                                            SitWith(Flirty):: "Well, where did we left off?"
+                                            ProceedWithSex = true
+                                        Endif
+                                    Else
+                                        ProceedWithSex = true
+                                    Endif
+                                Else
+                                    ProceedWithSex = true
+                                Endif
+                                If !Breakup
+                                    If ProceedWithSex
+                                        If !Aphrodisiac && AlcoholLevel < 150
+                                            Sex(SitWith, Player)
+                                        Else
+                                            SexNoAffair(SitWith, Player)
+                                        Endif
+                                        If !Aphrodisiac
+                                            If PartyType == 2 && Guest5.isSameAs(SitWith)
+                                                SitWith.dressWedding()
+                                                dressFormal()
+                                                Player.dress()
+                                            Elseif PartyType == 2 && !Guest5.isSameAs(SitWith)
+                                                dressFormal()
+                                                SitWith.dress()
+                                                dressFormal()
+                                                Player.dress()
+                                            Elseif PartyType == 4
+                                                dressFormal()
+                                                SitWith.dress()
+                                                dressFormal()
+                                                Player.dress()
+                                            Elseif PartyType == 5
+                                                SitWith.dressExcept(Outerwear, Top, Bottom, Foot, Headwear)
+                                                Player.dressExcept(Outerwear, Top, Bottom, Foot, Headwear)
+                                            Elseif PartyType == 7
+                                                SitWith.strip()
+                                                Player.strip()
+                                            Else
+                                                SitWith.dress()
+                                                Player.dress()
+                                            Endif
+                                            SitWith:arousal -= 100
+                                        Endif
+                                        SitWith.show(2)
+                                    Endif
+                                    hadSex = true
+                                    If Aphrodisiac || PartyType == 7
+                                        "The sex was amazing. We went back to rejoin the party."
+                                    Else 
+                                        "The sex was amazing. We put our clothes back on and went back to rejoin the party. We must have made plenty of noises, the look on some faces suggested as much."
+                                    Endif
+                                    If PartyType == 4
+                                        setBackground(office)
+                                    Elseif PartyType == 7
+                                        setBackground3D(Modules/sb_PartyAndNightlife/Bedrooms/sb_PNL_livingroom02.lpworld)
+                                    Endif
+                                Endif
+                                PartySitting = false
+                                passTime(0.5, 1.0)
+                            Elseif 1
+                                "As much as I'd love to have <SitWith.him_or_her> right here. It was not my house and I didn't want to upset <Host.name>."
+                                Player(Flirty):: "Hey, not here. Let's go back to my place ..."
+                                SitWith(Excited):: "Of course, let's go!"
+                                Player.dress()
+                                SitWith.dress()
+                                "We excused ourselves from the party and started heading back to my apartment. Our feet were very eager indeed."
+                                setBackground(street)
+                                "A while later ..."
+                                passTime(0.2, 1)
+                                moveTo(Home)
+                                setBackground(home)
+                                "As soon as we were inside, our hands were all over each other and we started passionately making out."
+                                perversion += Random(0, 0.2)
+                                If !Aphrodisiac && AlcoholLevel < 150
+                                    Sex(SitWith, Player)
+                                Else
+                                    SexNoAffair(SitWith, Player)
+                                Endif
+                                If !Aphrodisiac
+                                    SitWith.dress()
+                                    Player.dress()
+                                    SitWith:arousal -= 100
+                                Endif
+                                SitWith.hide()
+                                "The sex was amazing. <SitWith.name> excused <SitWith.himself_or_herself> after we were done and I went to bed ..."
+                                passTime(0.5, 1.0)
+                                PartyOngoing = false
+                            Else
+                                "I enjoyed the kiss but didn't feel like going any further ..."
+                                KissBack = false
+                            Endif
+                        Elseif KissBack && SitWith.isRelative()
+                            Player(Kiss):: "..."
+                            "It seems that my <SitWith.relationship> is really into me, we indulged ourselves in a passionate kiss."
+                            SitWith:incest += Random(0, 1)
+                            0:: [PlayerHosting || SitWith.IsSameAs(Host) || IsModEnabled(vin_VanillaPorn)] :: "Have sex right here"
+                            1:: !PlayerHosting && !SitWith.IsSameAs(Host):: "Invite <SitWith.him_or_her> home"
+                            2:: "Stop it there"
+                            
+                            If 0 
+                                "I needed to feel my <SitWith.relationship> right here, right now."
+                                "We dragged each other to the bedroom and started making out intensely. Things were escalating quickly ..."
+                                perversion += Random(0, 0.2)
+                                If !Aphrodisiac && AlcoholLevel < 150
+                                    Sex(SitWith, Player)
+                                Else
+                                    SexNoAffair(SitWith, Player)
+                                Endif
+                                hadSex = true
+                                If !Aphrodisiac
+                                    SitWith.dress()
+                                    Player.dress()
+                                    SitWith:arousal -= 100
+                                Endif
+                                SitWith.show(2)
+                                "The sex was amazing. We put our clothes back on and went back to rejoin the party. We must have made plenty of noises, the look on everyone's faces suggested as much."
+                                PartySitting = false
+                                passTime(0.5, 1.0)
+                            Elseif 1
+                                "As much as I'd love to have <SitWith.him_or_her> right here. It was not my house and I didn't want to upset <Host.name>."
+                                Player(Flirty):: "Hey, not here. Let's go back to my place ..."
+                                SitWith(Excited):: "Of course, let's go!"
+                                Player.dress()
+                                SitWith.dress()
+                                "We excused ourselves from the party and started heading back to my apartment. Our feet were very eager indeed."
+                                setBackground(street)
+                                "A while later ..."
+                                passTime(0.2, 1)
+                                moveTo(Home)
+                                setBackground(home)
+                                "As soon as we were inside, our hands were all over each other and we started passionately making out."
+                                perversion += Random(0, 0.2)
+                                If !Aphrodisiac && AlcoholLevel < 150
+                                    Sex(SitWith, Player)
+                                Else
+                                    SexNoAffair(SitWith, Player)
+                                Endif
+                                If !Aphrodisiac
+                                    SitWith.dress()
+                                    Player.dress()
+                                    SitWith:arousal -= 100
+                                Endif
+                                SitWith.hide()
+                                "The sex was amazing. <SitWith.name> excused <SitWith.himself_or_herself> after we were done and I went to bed ... At least we didn't do it in front of everyone."
+                                passTime(0.5, 1.0)
+                                PartyOngoing = false
+                            Else
+                                "I enjoyed the kiss but didn't feel like going any further ..."
+                                KissBack = false
+                            Endif
+                        Elseif KissBack && SitWith.isProstitute() && !isModEnabled(sb_PimpYourGirl)
+                            Player(Kiss):: "..."
+                            SpecialPrice1 = Random(5, 250)+SitWith:attractiveness+SitWith:pornfame-SitWith:attractiontoplayer+SitWith:arousal
+                            If SpecialPrice1 < 80
+                                SpecialPrice1 += Random(79, 117)
+                            Endif
+                            SpecialPrice2 = SpecialPrice1/2
+                            SpecialPrice1Converted = SpecialPrice1.convertToLocalCurrency(true)
+                            SpecialPrice2Converted = SpecialPrice2.convertToLocalCurrency(true)
+                            If SitWith.hadSex()
+                                SitWith(Flirty):: "Oh <Player.name>. You know already I'm a sexworker ... you have to pay me ... <SpecialPrice2Converted>"
+                            Else
+                                SitWith(Flirty):: "I'm sorry to tell you this now ... but I'm a sexworker. You have to pay me ... but only <SpecialPrice2Converted>"
+                            Endif
+                            "What will you do now?"
+                            0:: "Pay <SitWith.him_or_her> (<SpecialPrice2Converted>)"
+                            1:: "Show <SitWith.him_or_her> respect and add something extra (<SpecialPrice1Converted>)"
+                            2:: "No thanks ..."
+                            
+                            If 0
+                                money -= SpecialPrice2
+                                "You payed <SpecialPrice2Converted>."
+                                masochist += Random(0,1)
+                                SexNoAffair(SitWith, Player)
+                                hadSex = true
+                                perversion += Random(0, 0.5)
+                                SitWith:rapportwithplayer += Random(0, 2)
+                                SitWith.dress()
+                                Player.dress()
+                                SitWith.show(2)
+                                SitWith:arousal -= 100
+                                "The sex was amazing. We put our clothes back on and went back to rejoin the party. We must have made plenty of noises, the look on everyone's faces suggested as much."
+                                PartySitting = false
+                                passTime(0.5, 1.0)
+                            Elseif 1
+                                money -= SpecialPrice1
+                                "You payed <SpecialPrice1Converted>."
+                                masochist += Random(0,1)
+                                SexNoAffair(SitWith, Player)
+                                SitWith.dress()
+                                Player.dress()
+                                perversion += Random(0, 0.5)
+                                SitWith:rapportwithplayer += Random(0, 3)
+                                SitWith.show(2)
+                                SitWith:arousal -= 100
+                                "The sex was amazing. We put our clothes back on and went back to rejoin the party. We must have made plenty of noises, the look on everyone's faces suggested as much."
+                                passTime(0.5, 1.0)
+                            Else
+                                "I enjoyed the kiss but didn't feel like going any further ..."
+                                KissBack = false
+                            Endif
+                        Endif
+                    endWhile
+                endWhile
+                SitWith.hide()
+            Endif
+            
+            If !Breakup && !DebugLog && [!VeryBadIdea && !Aphrodisiac && PartyOngoing && timePassed > Random(8, 12)] 
+                "It was getting very late. The party winded down and everyone left ..."
+                PartyOngoing = false
+            Endif
+            
+            If !Breakup && !DebugLog && [VeryBadIdea && PartyOngoing && timePassed > Random(8, 12)] 
+                PartyOngoing = false
+            Endif
+
+            If !Breakup && !DebugLog && Aphrodisiac && AlcoholLevel > 150 && Random(0,150) > sneak+karma
+                If Guest1.isNaked() && Random(0,100) > Guest1:fitness && Random(0,100) > sneak
+                    Guest1.hide()
+                    "<Guest1.name> broke down on the floor vomiting ..."
+                    "I think the party is over now ..."
+                    BadEnd = true
+                    PartyOngoing = false
+                    Guest1:perversion -= 15
+                Elseif Guest2.isNaked() && Random(0,100) > Guest2:fitness  && Random(0,100) > sneak
+                    Guest2.hide()
+                    "<Guest2.name> tryed to dance naked, but fell hard on the floor ..."
+                    "I think the party is over now ..."
+                    BadEnd = true
+                    PartyOngoing = false
+                    Guest2:perversion -= 15
+                Elseif Guest3.isNaked() && Random(0,100) > Guest3:fitness  && Random(0,100) > sneak
+                    Guest3.hide()
+                    "<Guest3.name> tryed to dance, but fell very hard on the floor ..."
+                    "I think the party is over now ..."
+                    BadEnd = true
+                    PartyOngoing = false
+                    Guest3:perversion -= 15
+                Elseif Guest4.isNaked() && Random(0,100) > Guest4:fitness  && Random(0,100) > sneak
+                    Guest4.hide()
+                    "<Guest4.name> broke down on the floor vomiting ..."
+                    "I think the party is over now ..."
+                    BadEnd = true
+                    PartyOngoing = false
+                    Guest4:perversion -= 15
+                Elseif Guest5.isNaked() && Random(0,100) > Guest5:fitness  && Random(0,100) > sneak
+                    Guest5.hide()
+                    "<Guest5.name> suddenly screamed in pain ..."
+                    "I think the party is over now ..."
+                    BadEnd = true
+                    PartyOngoing = false
+                    Guest5:perversion -= 15
+                Endif
+            Endif
+            
+            If !Breakup && !PartyOngoing && PartyType != 7 && Aphrodisiac && BadEnd
+                Guest1.hide()
+                Guest2.hide()
+                Guest3.hide()
+                Guest4.hide()
+                Guest5.hide()
+                Player.hide()
+                If !PlayerHosting
+                    If PartyType == 4
+                        Host.hide()
+                        setBackground(streets)
+                        "The next morning I heard from <Host.name> that everybody was feeling horrible and nobody could remember something from the party."
+                        "And <Host.he_or_she> told me that also the office is now total mess."
+                        "Then <Host.name> asked me how I feel and ... I lied ... <Host.he_or_she> told me that they suspect someone spiked the punch bowl ..."
+                        Host:rapportwithplayer -= Random(0,35)
+                    Else
+                        Host.hide()
+                        setBackground(streets)
+                        "The next morning I heard from <Host.name> that everybody was feeling horrible and nobody could remember something from the party."
+                        "And <Host.he_or_she> told me that also <Host.his_or_her> apartment is now total mess."
+                        "Then <Host.name> asked me how I feel and ... I lied ... <Host.he_or_she> told me that they suspect someone spiked the punch bowl ..."
+                        Host:rapportwithplayer -= Random(0,35)
+                    Endif
+                Else
+                    setBackground(streets)
+                    "The next morning I heard from <Guest2.name> that everybody was feeling horrible and nobody could remember something from the party."
+                    "Then <Guest2.name> asked me how I feel and ... I lied ... <Guest2.he_or_she> told me that they suspect someone spiked the punch bowl ..."
+                Endif
+                Player(Anxious):: "..."
+                Guest1:rapportwithplayer -= Random(0,35)
+                Guest2:rapportwithplayer -= Random(0,35)
+                Guest3:rapportwithplayer -= Random(0,35)
+                Guest4:rapportwithplayer -= Random(0,35)
+                Guest5:rapportwithplayer -= Random(0,35)
+                karma -= Random(0,2)
+            Endif
+            
+        endWhile
+        
+        timeout(72, house_party)
+        
+    Else
+        timeout(24, house_party)
+        
+    Endif
+    
+    If VeryBadIdea
+        Guest1.hide()
+        Guest2.hide()
+        Guest3.hide()
+        Guest4.hide()
+        Guest5.hide()
+        Host.hide()
+        Player.hide()
+        "Suddenly everything goes black ... you lost your consciousness."
+        setBackground(streets)
+        "You wake up in a dark alley ..."
+        "It is quiet around you ..."
+        Player()::"..."
+        "As you try to stand up you notice that you are naked ... and your body is covered with bruises ... your whole body hurts. It feels like you have been beaten up."
+        0:: "Stand up"
+        
+        Player.strip()
+        Player.show(3)
+        Player(Pain)::"Ouch ..."
+        "You look around ..."
+        "I don't know this area at all ...how did I get here?"
+        "You feel something running down your leg ... "
+        "It's cum, a lot of cum! You can smell it ... a thick stream of cum ... it gushes literally out of your <Player.ass_or_pussy>, running down both legs ..."
+        If Player.isFemale() && !Player.isPregnant()
+            Player.impregnate()
+        Endif
+        "It's impossible that this is the result of having sex with a few party guests ..."
+        "Your <Player.ass_or_pussy> feels like somebody tried to rip it apart ..."
+        0:: "Try to walk"
+        
+        "You try to do a few steps and everything turns black again ..."
+        Player.hide()
+        "..."
+        "... ..."
+        "... ... ..."
+        0:: "Open your eyes"
+        
+        setBackground(hospital)
+        "You can only see things vaguely ... but you can hear someone talking ..."
+        "They found <Player.him_or_her> in ... the industrial zone ... clue where <Player.he_or_she> came from."
+        "... raped two days in a row ... must have used an iron bar ... our doctor asked for the police ... they suspect the whole pub ... in the back room ... even whips and ..."
+        "You know they must be talking about you ..."
+        Player()::"..."
+        "Then you lost your consciousness again ..."
+        setBackground(doctor)
+        "..."
+        "... ..."
+        "... ... ..."
+        "After a few days and a couple of awkward conversations with the police you are finally on the point of being allowed to leave."
+        Player.dress()
+        Player.show(0)
+        "The incident left a lot of traces on your body and somehow you still can't remember what happened. The little information from the police wasn't very helpful ..."
+        "Actually you don't want to remember what happened. It makes you feel very bad to even think about it ... "
+        "But you are very happy about to finally go home ..."
+        
+        MoveTo(home)
+        
+        energy => 0
+        arousal => 0
+        perversion -= Random(0,50)
+        fitness -= Random(0,50)
+        attractiveness -= Random(0,50)
+        intelligence -= Random(0,50)
+        money -= Random(0,500)
+        interpersonal -= Random(0,50)
+    Endif
+    SB_PartyType.clearGlobal()
+    sceneEnd()
+    
+    
